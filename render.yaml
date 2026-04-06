@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: ims-backend
+    runtime: java
+    rootDir: backend
+    buildCommand: ./mvnw clean install
+    startCommand: java -jar target/*.jar

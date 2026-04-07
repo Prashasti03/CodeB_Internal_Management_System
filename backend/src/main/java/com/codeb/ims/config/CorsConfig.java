@@ -17,7 +17,7 @@ public class CorsConfig {
                         // .allowedOrigins("http://localhost:5173")
                         // .allowedOrigins("https://frontend.netlify.app")
                         .allowedOrigins("https://idyllic-pastelito-b100f6.netlify.app")
-                        // .allowedOrigins("*")   // use it only during testing
+                        .allowedOrigins("*")   // use it only during testing
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);

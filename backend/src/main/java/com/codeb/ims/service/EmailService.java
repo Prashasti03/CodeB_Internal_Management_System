@@ -28,7 +28,7 @@ public class EmailService {
 
         message.setText(
                 "Click to reset password:\n" +
-                        "https://your-frontend.netlify.app/reset-password?token=..." + token);
+                        "https://idyllic-pastelito-b100f6.netlify.app/reset-password?token=..." + token);
 
         mailSender.send(message);
     }

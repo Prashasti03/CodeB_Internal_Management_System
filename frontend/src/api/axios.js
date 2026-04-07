@@ -2,7 +2,8 @@ import axios from "axios";
 
 const api = axios.create({
   // baseURL: "http://localhost:8080/api", // change in production
-  baseURL: "https://backend.onrender.com/api"
+  // baseURL: "https://backend.onrender.com/api"
+  baseURL: "https://codeb-internal-management-system.onrender.com/api"
 });
 
 api.interceptors.request.use((config) => {

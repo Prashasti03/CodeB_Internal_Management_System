@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
 
         // String link = "http://localhost:8080/api/auth/verify?token=" + token;
         // String link = "http://localhost:5173/verify?token=" + token;
-        String link = "https://frontend.netlify.app/verify?token=..." + token;
+        String link = "https://idyllic-pastelito-b100f6.netlify.app/verify?token=..." + token;
 
 
         emailService.sendEmail(

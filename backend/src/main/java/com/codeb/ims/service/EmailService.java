@@ -20,7 +20,7 @@ public class EmailService {
             message.setTo(to);
             message.setSubject(subject);
             message.setText(text);
-            message.setFrom("your-email@gmail.com"); // Must match your SMTP username
+            message.setFrom("dhanorkarprashasti@gmail.com"); // Must match your SMTP username
 
             mailSender.send(message);
             log.info("Email sent successfully to: {}", to);

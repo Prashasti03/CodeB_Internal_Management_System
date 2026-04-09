@@ -5,6 +5,7 @@ import com.codeb.ims.dto.LoginRequest;
 import com.codeb.ims.dto.RegisterRequest;
 import com.codeb.ims.dto.ResetPasswordRequest;
 import com.codeb.ims.service.UserService;
+import com.codeb.ims.service.EmailService;
 import com.codeb.ims.service.impl.UserServiceImpl;
 import com.codeb.ims.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

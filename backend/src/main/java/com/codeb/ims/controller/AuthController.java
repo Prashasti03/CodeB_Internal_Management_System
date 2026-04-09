@@ -51,4 +51,14 @@ public class AuthController {
         userService.resetPassword(request.getToken(), request.getNewPassword());
         return "Password reset successful";
     }
+
+    @PostMapping("/test-email")
+    public String testEmail(@RequestParam String email) {
+        try {
+            emailService.sendEmail(email, "Test Email", "This is a test email from your app");
+            return "Email sent successfully to " + email;
+        } catch (Exception e) {
+            return "Failed to send email: " + e.getMessage();
+        }
+    }
 }

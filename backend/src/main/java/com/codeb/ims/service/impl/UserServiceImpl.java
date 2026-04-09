@@ -1,19 +1,19 @@
 package com.codeb.ims.service.impl;
 
 import com.codeb.ims.dto.RegisterRequest;
+import com.codeb.ims.dto.LoginRequest;
 import com.codeb.ims.entity.User;
 import com.codeb.ims.repository.UserRepository;
+import com.codeb.ims.security.JwtUtil;
 import com.codeb.ims.service.EmailService;
 import com.codeb.ims.service.UserService;
+
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.codeb.ims.dto.LoginRequest;
-import com.codeb.ims.security.JwtUtil;
+
 import java.util.UUID;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -44,21 +44,21 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
 
+        // ✅ FIXED LINK (NO "...")
+        // String link = "https://codeb-internal-management-system.onrender.com/api/auth/verify?token=" + token;
+
+        // OR frontend route (if you handle verification there)
         String link = "https://idyllic-pastelito-b100f6.netlify.app/verify?token=" + token;
-        
-        try {
-            // This matches the 3-parameter sendEmail method
-            emailService.sendEmail(
+
+        System.out.println("Verification link: " + link);
+
+        emailService.sendEmail(
                 user.getEmail(),
                 "Verify your account",
-                "Click here to verify: " + link
-            );
-            log.info("Verification email sent to: {}", user.getEmail());
-            return "User Registered. Please verify email.";
-        } catch (Exception e) {
-            log.error("Failed to send verification email to: {}", user.getEmail(), e);
-            return "User Registered but email verification failed. Please contact support.";
-        }
+                "Click here to verify your account:\n" + link
+        );
+
+        return "User Registered. Please verify email.";
     }
 
     @Override
@@ -80,6 +80,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void verifyUser(String token) {
+
         User user = userRepository.findByVerificationToken(token)
                 .orElseThrow(() -> new RuntimeException("Invalid token"));
 
@@ -87,9 +88,13 @@ public class UserServiceImpl implements UserService {
         user.setVerificationToken(null);
 
         userRepository.save(user);
+
+        System.out.println("User verified: " + user.getEmail());
     }
 
+    @Override
     public void forgotPassword(String email) {
+
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -101,7 +106,9 @@ public class UserServiceImpl implements UserService {
         emailService.sendResetEmail(user.getEmail(), token);
     }
 
+    @Override
     public void resetPassword(String token, String newPassword) {
+
         User user = userRepository.findByResetToken(token)
                 .orElseThrow(() -> new RuntimeException("Invalid token"));
 

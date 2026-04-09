@@ -1,39 +1,53 @@
 package com.codeb.ims.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmailService {
 
     private final JavaMailSender mailSender;
 
-    // Original method with 3 parameters
-    public void sendEmail(String to, String subject, String text) {
+    public void sendEmail(String to, String subject, String body) {
+
         try {
+            System.out.println("Sending email to: " + to);
+
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(to);
             message.setSubject(subject);
-            message.setText(text);
-            message.setFrom("dhanorkarprashasti@gmail.com");
-            
+            message.setText(body);
+
             mailSender.send(message);
-            log.info("Email sent successfully to: {}", to);
+
+            System.out.println("Email sent successfully to: " + to);
+
         } catch (Exception e) {
-            log.error("Failed to send email to: {}", to, e);
-            throw new RuntimeException("Email sending failed: " + e.getMessage());
+            System.out.println("❌ Email sending failed!");
+            e.printStackTrace(); // VERY IMPORTANT for Render logs
         }
     }
 
-    // Method for password reset emails
-    public void sendResetEmail(String to, String token) {
-        String resetLink = "https://idyllic-pastelito-b100f6.netlify.app/reset-password?token=" + token;
-        String text = "Click here to reset your password: " + resetLink;
-        sendEmail(to, "Password Reset Request", text);
+    public void sendResetEmail(String toEmail, String token) {
+
+        try {
+            String link = "https://idyllic-pastelito-b100f6.netlify.app/reset-password?token=" + token;
+
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(toEmail);
+            message.setSubject("Reset Password");
+            message.setText("Click to reset password:\n" + link);
+
+            mailSender.send(message);
+
+            System.out.println("Reset email sent to: " + toEmail);
+
+        } catch (Exception e) {
+            System.out.println("❌ Reset email failed!");
+            e.printStackTrace();
+        }
     }
 }

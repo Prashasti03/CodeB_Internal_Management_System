@@ -18,6 +18,7 @@ public class AuthController {
 
     private final UserService userService;
     private final UserRepository userRepository;
+    private final EmailService emailService;
 
     @PostMapping("/register")
     public String register(@RequestBody RegisterRequest request) {

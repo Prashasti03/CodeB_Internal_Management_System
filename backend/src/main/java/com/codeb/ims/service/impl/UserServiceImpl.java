@@ -6,12 +6,14 @@ import com.codeb.ims.repository.UserRepository;
 import com.codeb.ims.service.EmailService;
 import com.codeb.ims.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.codeb.ims.dto.LoginRequest;
 import com.codeb.ims.security.JwtUtil;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -28,7 +30,7 @@ public class UserServiceImpl implements UserService {
             return "Email already registered";
         }
 
-        String token = java.util.UUID.randomUUID().toString();
+        String token = UUID.randomUUID().toString();
 
         User user = User.builder()
                 .fullName(request.getFullName())
@@ -42,17 +44,21 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
 
-        // String link = "http://localhost:8080/api/auth/verify?token=" + token;
-        // String link = "http://localhost:5173/verify?token=" + token;
         String link = "https://idyllic-pastelito-b100f6.netlify.app/verify?token=" + token;
-
-
-        emailService.sendEmail(
+        
+        try {
+            // This matches the 3-parameter sendEmail method
+            emailService.sendEmail(
                 user.getEmail(),
                 "Verify your account",
-                "Click here to verify: " + link);
-
-        return "User Registered. Please verify email.";
+                "Click here to verify: " + link
+            );
+            log.info("Verification email sent to: {}", user.getEmail());
+            return "User Registered. Please verify email.";
+        } catch (Exception e) {
+            log.error("Failed to send verification email to: {}", user.getEmail(), e);
+            return "User Registered but email verification failed. Please contact support.";
+        }
     }
 
     @Override

@@ -24,7 +24,9 @@ public class UserServiceImpl implements UserService {
     private final EmailService emailService;
 
     @Override
-    public String registerUser(RegisterRequest request) {
+public String registerUser(RegisterRequest request) {
+
+    try {
 
         if (userRepository.existsByEmail(request.getEmail())) {
             return "Email already registered";
@@ -44,22 +46,28 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
 
-        // ✅ FIXED LINK (NO "...")
-        // String link = "https://codeb-internal-management-system.onrender.com/api/auth/verify?token=" + token;
+        System.out.println("✅ User saved successfully");
 
-        // OR frontend route (if you handle verification there)
         String link = "https://idyllic-pastelito-b100f6.netlify.app/verify?token=" + token;
 
-        System.out.println("Verification link: " + link);
+        System.out.println("🔗 Verification link: " + link);
 
         emailService.sendEmail(
                 user.getEmail(),
                 "Verify your account",
-                "Click here to verify your account:\n" + link
+                "Click here to verify:\n" + link
         );
 
+        System.out.println("📧 Email method called");
+
         return "User Registered. Please verify email.";
+
+    } catch (Exception e) {
+        System.out.println("❌ ERROR in registerUser()");
+        e.printStackTrace();
+        return "Registration failed";
     }
+}
 
     @Override
     public String loginUser(LoginRequest request) {

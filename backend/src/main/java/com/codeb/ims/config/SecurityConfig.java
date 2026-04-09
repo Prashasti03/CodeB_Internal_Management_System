@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtAuthFilter jwtAuthFilter; // your existing filter
+    private final JwtAuthFilter jwtAuthFilter; 
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -40,7 +40,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // ✅ CORS CONFIG HERE (IMPORTANT)
+    // CORS CONFIG HERE
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
 

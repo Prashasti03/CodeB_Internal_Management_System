@@ -7,7 +7,7 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [user, setUser] = useState(null);
 
-  // ✅ Decode token when app loads
+  // Decode token when app loads
   useEffect(() => {
     if (token) {
       const decoded = jwtDecode(token);
@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
     setToken(newToken);
 
     const decoded = jwtDecode(newToken);
-    setUser(decoded); // ✅ THIS WAS MISSING
+    setUser(decoded); 
   };
 
   const logout = () => {

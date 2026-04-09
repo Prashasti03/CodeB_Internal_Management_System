@@ -16,10 +16,3 @@ public interface UserService {
     void resetPassword(String token, String newPassword);
 }
 
-// User user = userRepository.findByVerificationToken(token)
-// .orElseThrow(() -> new RuntimeException("Invalid token"));
-
-// user.setVerified(true);
-// user.setVerificationToken(null);
-
-// userRepository.save(user);

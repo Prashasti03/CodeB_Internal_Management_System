@@ -36,20 +36,15 @@ Backend:
 cd frontend
 npm install
 npm run dev
+Deployed on Netlify - 'https://idyllic-pastelito-b100f6.netlify.app'
 
 ### Backend
 cd backend
 ./mvnw spring-boot:run
+Deployed on Render - 'https://codeb-internal-management-system.onrender.com'
 
 
 ---
-
-# 9. END USER DOCUMENTATION
-
-Use this in submission:
-
----
-
 ## User Authentication Module – End User Guide
 
 ### 1. Registration

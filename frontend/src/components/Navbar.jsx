@@ -21,7 +21,7 @@ const Navbar = () => {
           IMS
         </span>
 
-        {/* ✅ Mobile Toggle */}
+        {/* Mobile Toggle */}
         <button
           className="navbar-toggler"
           type="button"
@@ -31,7 +31,7 @@ const Navbar = () => {
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        {/* ✅ Collapsible Menu */}
+        {/* Collapsible Menu */}
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
             {!user ? (

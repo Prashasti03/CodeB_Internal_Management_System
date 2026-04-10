@@ -7,6 +7,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import VerifyEmail from "./pages/VerifyEmail";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import GroupDashboard from "./pages/GroupDashboard";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/verify" element={<VerifyEmail />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/groups" element={<GroupDashboard />} />
 
         <Route
           path="/dashboard"

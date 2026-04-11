@@ -13,44 +13,43 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    // private final Key SECRET_KEY =
-    // "my_super_secret_key_which_is_very_long_123456789";
-    // private final Key SECRET_KEY = ${SECRET_KEY};
-
     @Value("${SECRET_KEY}")
     private String SECRET_KEY;
 
+    // Convert String → Key
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
     }
 
+    // GENERATE TOKEN 
     public String generateToken(String email, String role) {
+
+        System.out.println("SECRET KEY: " + SECRET_KEY); 
 
         return Jwts.builder()
                 .setSubject(email)
                 .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 86400000))
-                // .signWith(SECRET_KEY)
-                // .signWith(getSignKey(), SignatureAlgorithm.HS256)
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256) 
                 .compact();
-                System.out.println("SECRET KEY: " + SECRET_KEY);
     }
 
+    // EXTRACT EMAIL
     public String extractEmail(String token) {
         return Jwts.parserBuilder()
-                // .setSigningKey(getSigningKey())
+                .setSigningKey(getSigningKey()) 
                 .build()
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
     }
 
+    // EXTRACT ROLE
     public String extractRole(String token) {
 
         Claims claims = Jwts.parserBuilder()
-                // .setSigningKey(getSignKey())
-                .setSigningKey(SECRET_KEY)
+                .setSigningKey(getSigningKey()) 
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
@@ -58,8 +57,8 @@ public class JwtUtil {
         return claims.get("role", String.class);
     }
 
+    // VALIDATE TOKEN
     public boolean validateToken(String token, String email) {
-
         String extractedEmail = extractEmail(token);
         return extractedEmail.equals(email);
     }

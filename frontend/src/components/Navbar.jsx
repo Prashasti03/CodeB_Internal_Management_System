@@ -1,3 +1,100 @@
+// import { useNavigate } from "react-router-dom";
+// import { useAuth } from "../context/AuthContext";
+
+// const Navbar = () => {
+//   const navigate = useNavigate();
+//   const { logout, user } = useAuth();
+
+//   const handleLogout = () => {
+//     logout();
+//     navigate("/login");
+//   };
+
+//   return (
+//     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+//       <div className="container">
+//         <span
+//           className="navbar-brand"
+//           style={{ cursor: "pointer" }}
+//           onClick={() => navigate("/dashboard")}
+//         >
+//           IMS
+//         </span>
+
+//         {/* Mobile Toggle */}
+//         <button
+//           className="navbar-toggler"
+//           type="button"
+//           data-bs-toggle="collapse"
+//           data-bs-target="#navbarNav"
+//         >
+//           <span className="navbar-toggler-icon"></span>
+//         </button>
+
+//         {/* Collapsible Menu */}
+//         <div className="collapse navbar-collapse" id="navbarNav">
+//           <ul className="navbar-nav ms-auto">
+//             {!user ? (
+//               <>
+//                 <li className="nav-item">
+//                   <span
+//                     className="nav-link"
+//                     style={{ cursor: "pointer" }}
+//                     onClick={() => navigate("/login")}
+//                   >
+//                     Login
+//                   </span>
+//                 </li>
+
+//                 <li className="nav-item">
+//                   <span
+//                     className="nav-link"
+//                     style={{ cursor: "pointer" }}
+//                     onClick={() => navigate("/register")}
+//                   >
+//                     Register
+//                   </span>
+//                 </li>
+//               </>
+//             ) : (
+//               <>
+//                 <li className="nav-item">
+//                   <span className="nav-link">
+//                     {/* {user?.role === "ADMIN" ? "Admin" : "User"} */}
+//                     {user?.role}
+//                   </span>
+//                 </li>
+
+//                 <li className="nav-item">
+//                   <span
+//                     className="nav-link"
+//                     style={{ cursor: "pointer" }}
+//                     onClick={() => navigate("/dashboard")}
+//                   >
+//                     Dashboard
+//                   </span>
+//                 </li>
+
+//                 <li className="nav-item">
+//                   <span
+//                     className="nav-link text-danger"
+//                     style={{ cursor: "pointer" }}
+//                     onClick={logout}
+//                   >
+//                     Logout
+//                   </span>
+//                 </li>
+//               </>
+//             )}
+//           </ul>
+//         </div>
+//       </div>
+//     </nav>
+//   );
+// };
+
+// export default Navbar;
+
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
@@ -5,16 +102,13 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { logout, user } = useAuth();
 
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
-  };
-
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
       <div className="container">
+
+        {/* Logo */}
         <span
-          className="navbar-brand"
+          className="navbar-brand fw-bold"
           style={{ cursor: "pointer" }}
           onClick={() => navigate("/dashboard")}
         >
@@ -31,16 +125,17 @@ const Navbar = () => {
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        {/* Collapsible Menu */}
+        {/* Menu */}
         <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav ms-auto">
+          <ul className="navbar-nav ms-auto align-items-center">
+
             {!user ? (
               <>
                 <li className="nav-item">
                   <span
                     className="nav-link"
-                    style={{ cursor: "pointer" }}
                     onClick={() => navigate("/login")}
+                    style={{ cursor: "pointer" }}
                   >
                     Login
                   </span>
@@ -49,8 +144,8 @@ const Navbar = () => {
                 <li className="nav-item">
                   <span
                     className="nav-link"
-                    style={{ cursor: "pointer" }}
                     onClick={() => navigate("/register")}
+                    style={{ cursor: "pointer" }}
                   >
                     Register
                   </span>
@@ -58,34 +153,49 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <li className="nav-item">
-                  <span className="nav-link">
-                    {/* {user?.role === "ADMIN" ? "Admin" : "User"} */}
+                {/* Role Badge */}
+                <li className="nav-item me-3">
+                  <span className="badge bg-info text-dark p-2">
                     {user?.role}
                   </span>
                 </li>
 
+                {/* Dashboard */}
                 <li className="nav-item">
                   <span
                     className="nav-link"
-                    style={{ cursor: "pointer" }}
                     onClick={() => navigate("/dashboard")}
+                    style={{ cursor: "pointer" }}
                   >
                     Dashboard
                   </span>
                 </li>
 
+                {/* Admin Link */}
+                {user?.role === "ADMIN" && (
+                  <li className="nav-item">
+                    <span
+                      className="nav-link"
+                      onClick={() => navigate("/groups")}
+                      style={{ cursor: "pointer" }}
+                    >
+                      Groups
+                    </span>
+                  </li>
+                )}
+
+                {/* Logout */}
                 <li className="nav-item">
-                  <span
-                    className="nav-link text-danger"
-                    style={{ cursor: "pointer" }}
+                  <button
+                    className="btn btn-sm btn-outline-danger ms-3"
                     onClick={logout}
                   >
                     Logout
-                  </span>
+                  </button>
                 </li>
               </>
             )}
+
           </ul>
         </div>
       </div>

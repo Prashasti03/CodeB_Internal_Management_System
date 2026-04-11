@@ -32,14 +32,14 @@ public class JwtUtil {
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 86400000))
                 // .signWith(SECRET_KEY)
-                .signWith(getSignKey(), SignatureAlgorithm.HS256)
+                // .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
                 System.out.println("SECRET KEY: " + SECRET_KEY);
     }
 
     public String extractEmail(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
+                // .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody()

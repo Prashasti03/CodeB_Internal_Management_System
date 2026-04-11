@@ -19,65 +19,69 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import org.springframework.security.config.http.SessionCreationPolicy;
+
 import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-        private final JwtAuthFilter jwtAuthFilter;
+    private final JwtAuthFilter jwtAuthFilter;
+    private final UserDetailsService userDetailsService;
+    private final PasswordEncoder passwordEncoder;
 
-        @Bean
-        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-                http
-                                .csrf(csrf -> csrf.disable())
-                                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                                .authorizeHttpRequests(auth -> auth
-                                                .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**")
-                                                .permitAll()
-                                                .requestMatchers("/").permitAll()
-                                                .requestMatchers("/api/auth/**").permitAll()
-                                                .requestMatchers("/api/groups/**").hasRole("ADMIN")
-                                                .anyRequest().authenticated())
-                                .sessionManagement(session -> session
-                                                .sessionCreationPolicy(
-                                                                org.springframework.security.config.http.SessionCreationPolicy.STATELESS))
-                                .authenticationProvider(authenticationProvider(userDetailsService, passwordEncoder))
-                                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        http
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/groups/**").hasRole("ADMIN")
+                        .anyRequest().authenticated())
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                return http.build();
-        }
+                .authenticationProvider(authenticationProvider())
 
-        // CORS CONFIG HERE
-        @Bean
-        public CorsConfigurationSource corsConfigurationSource() {
+                // JWT filter
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-                CorsConfiguration config = new CorsConfiguration();
+        return http.build();
+    }
 
-                config.setAllowedOrigins(List.of(
-                                "http://localhost:5173",
-                                "https://idyllic-pastelito-b100f6.netlify.app")); // React
-                config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                config.setAllowedHeaders(List.of("*"));
-                config.setAllowCredentials(true);
-                config.setExposedHeaders(List.of("*"));
+    // AUTH PROVIDER
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
 
-                UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-                source.registerCorsConfiguration("/**", config);
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder);
+        return authProvider;
+    }
 
-                return source;
-        }
+    // CORS CONFIG
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
 
-        @Bean
-        public AuthenticationProvider authenticationProvider(
-                        UserDetailsService userDetailsService,
-                        PasswordEncoder passwordEncoder) {
+        CorsConfiguration config = new CorsConfiguration();
 
-                DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-                authProvider.setUserDetailsService(userDetailsService);
-                authProvider.setPasswordEncoder(passwordEncoder);
-                return authProvider;
-        }
+        config.setAllowedOrigins(List.of(
+                "http://localhost:5173",
+                "https://idyllic-pastelito-b100f6.netlify.app"
+        ));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
+        config.setExposedHeaders(List.of("*"));
 
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+
+        return source;
+    }
 }

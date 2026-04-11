@@ -48,6 +48,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     List.of(new SimpleGrantedAuthority("ROLE_" + role)));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            System.out.println("ROLE FROM TOKEN: " + role);
 
         } catch (Exception e) {
             System.out.println("Invalid JWT Token");

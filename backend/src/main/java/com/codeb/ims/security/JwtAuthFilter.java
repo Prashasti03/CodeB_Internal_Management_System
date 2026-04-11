@@ -47,10 +47,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     null,
                     List.of(new SimpleGrantedAuthority("ROLE_" + role)));
 
-            authentication.setDetails(new org.springframework.security.web.authentication.WebAuthenticationDetailsSource().buildDetails(request));
+            authentication.setDetails(
+                    new org.springframework.security.web.authentication.WebAuthenticationDetailsSource()
+                            .buildDetails(request));
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            System.out.println("ROLE FROM TOKEN: " + role);
+            if (SecurityContextHolder.getContext().getAuthentication() == null) {
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+            System.out.println("AUTH SET FOR: " + email + " ROLE: " + role);
 
         } catch (Exception e) {
             System.out.println("Invalid JWT Token");

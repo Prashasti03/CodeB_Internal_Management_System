@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import com.codeb.ims.security.JwtAuthFilter;
+import com.codeb.ims.security.CustomUserDetailsService;
 
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 

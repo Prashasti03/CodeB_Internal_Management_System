@@ -6,13 +6,23 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Date;
 
 @Component
 public class JwtUtil {
 
-    private final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    // private final Key SECRET_KEY =
+    // "my_super_secret_key_which_is_very_long_123456789";
+    // private final Key SECRET_KEY = ${SECRET_KEY};
+
+    @Value("${SECRET_KEY}")
+    private String SECRET_KEY;
+
+    private Key getSigningKey() {
+        return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+    }
 
     public String generateToken(String email, String role) {
 
@@ -21,14 +31,15 @@ public class JwtUtil {
                 .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 86400000))
-                .signWith(SECRET_KEY)
-                // .signWith(getSignKey(), SignatureAlgorithm.HS256)
+                // .signWith(SECRET_KEY)
+                .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
+                System.out.println("SECRET KEY: " + SECRET_KEY);
     }
 
     public String extractEmail(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(SECRET_KEY)
+                .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody()

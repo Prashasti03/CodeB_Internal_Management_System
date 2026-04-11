@@ -10,6 +10,7 @@ function GroupDashboard() {
   const [groups, setGroups] = useState([]);
   const [name, setName] = useState("");
   const [editId, setEditId] = useState(null);
+  const [error, setError] = useState("");
 
   const fetchGroups = async () => {
     const res = await getGroups();
@@ -33,8 +34,12 @@ function GroupDashboard() {
       setName("");
       setEditId(null);
       fetchGroups();
-    } catch (err) {
-      alert(err.response?.data || "Error");
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        setError(error.response.data.message);
+      } else {
+        setError("Something went wrong");
+      }
     }
   };
 
@@ -51,6 +56,21 @@ function GroupDashboard() {
   return (
     <div className="container mt-4">
       <h2>Group Management</h2>
+
+      {/* Error Alert */}
+      {error && (
+        <div
+          className="alert alert-danger alert-dismissible fade show"
+          role="alert"
+        >
+          {error}
+          <button
+            type="button"
+            className="btn-close"
+            onClick={() => setError("")}
+          ></button>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="mb-3">
         <input

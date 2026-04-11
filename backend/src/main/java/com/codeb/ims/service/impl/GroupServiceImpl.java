@@ -21,7 +21,7 @@ public class GroupServiceImpl implements GroupService {
 
         groupRepository.findByGroupName(request.getGroupName())
                 .ifPresent(g -> {
-                    throw new RuntimeException("Group name already exists");
+                    throw new RuntimeException("Group with this name already exists");
                 });
 
         Group group = Group.builder()

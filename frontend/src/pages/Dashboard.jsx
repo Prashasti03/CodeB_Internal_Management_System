@@ -32,13 +32,14 @@
 // export default Dashboard;
 
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <div className="container mt-4">
-      
       {/* Header */}
       <div className="mb-4">
         <h2 className="fw-bold">Welcome back 👋</h2>
@@ -59,7 +60,6 @@ const Dashboard = () => {
 
       {/* Cards Section */}
       <div className="row g-4">
-        
         {/* Profile Card */}
         <div className="col-md-4">
           <div className="card shadow-sm border-0 h-100">
@@ -81,7 +81,10 @@ const Dashboard = () => {
                 <p className="card-text text-muted">
                   Create, update and manage groups.
                 </p>
-                <button className="btn btn-outline-success btn-sm">
+                <button
+                  className="btn btn-outline-success btn-sm"
+                  onClick={() => navigate("/groups")}
+                >
                   Manage Groups
                 </button>
               </div>
@@ -100,7 +103,6 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );

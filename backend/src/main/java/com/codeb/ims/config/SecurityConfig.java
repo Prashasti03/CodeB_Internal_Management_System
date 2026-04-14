@@ -45,6 +45,7 @@ public class SecurityConfig {
                                 .requestMatchers("/").permitAll()
                                 .requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers("/api/groups/**").hasRole("ADMIN")
+                                .requestMatchers("/api/chains/**").hasRole("ADMIN")
                                 .anyRequest().authenticated())
                         .exceptionHandling(ex -> ex
                                 .authenticationEntryPoint((request, response, authException) -> {

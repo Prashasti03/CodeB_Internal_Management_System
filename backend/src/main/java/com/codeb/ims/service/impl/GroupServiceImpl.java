@@ -15,7 +15,7 @@ import java.util.List;
 
 public class GroupServiceImpl implements GroupService {
 
-    @Autowired
+    // @Autowired
     private ChainRepository chainRepository;
 
     private final GroupRepository groupRepository;
@@ -59,27 +59,47 @@ public class GroupServiceImpl implements GroupService {
         return mapToResponse(group);
     }
 
+    // @Override
+    // public String deleteGroup(Integer groupId) {
+    // Group group = groupRepository.findById(groupId)
+    // .orElseThrow(() -> new RuntimeException("Group not found with ID: " +
+    // groupId));
+
+    // // ✅ NEW CHECK: Does this group have any active chains?
+    // boolean hasChains =
+    // chainRepository.existsByGroup_GroupIdAndIsActiveTrue(groupId);
+
+    // if (hasChains) {
+    // throw new RuntimeException(
+    // "Cannot delete group '" + group.getGroupName() +
+    // "' because it has active chains/companies linked to it. " +
+    // "Please remove all chains from this group first."
+    // );
+    // }
+
+    // // Safe to soft delete the group
+    // group.setIsActive(false);
+    // groupRepository.save(group);
+    // return "Group '" + group.getGroupName() + "' has been deactivated
+    // successfully.";
+    // }
+
     @Override
-    public String deleteGroup(Integer groupId) {
+    public void deleteGroup(Long groupId) {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new RuntimeException("Group not found with ID: " + groupId));
- 
-        // ✅ NEW CHECK: Does this group have any active chains?
-        boolean hasChains = chainRepository.existsByGroup_GroupIdAndIsActiveTrue(groupId);
- 
-        if (hasChains) {
-            throw new RuntimeException(
-                "Cannot delete group '" + group.getGroupName() +
-                "' because it has active chains/companies linked to it. " +
-                "Please remove all chains from this group first."
-            );
+
+        // CHECK: is group linked with any chain
+        boolean exists = chainRepository.existsByGroupAndIsActiveTrue(group);
+
+        if (exists) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Cannot delete group. It is linked with existing chains.");
         }
- 
-        // Safe to soft delete the group
-        group.setIsActive(false);
+
+        group.setIsActive(false); // soft delete
         groupRepository.save(group);
-        return "Group '" + group.getGroupName() + "' has been deactivated successfully.";
+        return "Group '"+ group.getGroupName() + "' has been deactivated successfully.";
     }
 
-    
 }

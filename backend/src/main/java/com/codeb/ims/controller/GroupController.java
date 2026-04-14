@@ -6,8 +6,12 @@ import com.codeb.ims.service.GroupService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/groups")
@@ -43,7 +47,7 @@ public class GroupController {
     @GetMapping("/active")
     public ResponseEntity<?> getActiveGroups() {
         try {
-            List<GroupDTO> groups = groupService.getAllActiveGroups();
+            List<GroupResponse> groups = groupService.getAllActiveGroups();
             return ResponseEntity.ok(groups);
         } catch (Exception e) {
             Map<String, String> error = new HashMap<>();

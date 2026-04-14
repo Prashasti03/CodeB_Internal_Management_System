@@ -14,4 +14,6 @@ public interface GroupService {
     GroupResponse updateGroup(Long id, GroupRequest request);
 
     String deleteGroup(Long id);
+
+    List<GroupResponse> getAllActiveGroups();
 }

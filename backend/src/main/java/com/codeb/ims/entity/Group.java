@@ -2,6 +2,7 @@ package com.codeb.ims.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.List;
 
 import java.time.LocalDateTime;
 

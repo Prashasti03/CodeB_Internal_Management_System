@@ -4,9 +4,14 @@ import com.codeb.ims.dto.GroupRequest;
 import com.codeb.ims.dto.GroupResponse;
 import com.codeb.ims.entity.Group;
 import com.codeb.ims.repository.GroupRepository;
+import com.codeb.ims.repository.ChainRepository;
 import com.codeb.ims.service.GroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import java.util.Map;
+import java.util.HashMap;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
@@ -16,7 +21,7 @@ import java.util.List;
 public class GroupServiceImpl implements GroupService {
 
     // @Autowired
-    private ChainRepository chainRepository;
+    private final ChainRepository chainRepository;
 
     private final GroupRepository groupRepository;
 
@@ -85,7 +90,7 @@ public class GroupServiceImpl implements GroupService {
     // }
 
     @Override
-    public void deleteGroup(Long groupId) {
+    public String deleteGroup(Long groupId) {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new RuntimeException("Group not found with ID: " + groupId));
 
@@ -99,7 +104,22 @@ public class GroupServiceImpl implements GroupService {
 
         group.setIsActive(false); // soft delete
         groupRepository.save(group);
-        return "Group '"+ group.getGroupName() + "' has been deactivated successfully.";
+        return "Group '" + group.getGroupName() + "' has been deactivated successfully.";
+    }
+
+    @Override
+    public List<GroupResponse> getAllActiveGroups() {
+        return groupRepository.findByIsActiveTrue()
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
+    private GroupResponse mapToResponse(Group group) {
+        return GroupResponse.builder()
+                .groupId(group.getGroupId())
+                .groupName(group.getGroupName())
+                .build();
     }
 
 }

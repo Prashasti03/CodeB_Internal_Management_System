@@ -8,6 +8,8 @@ import VerifyEmail from "./pages/VerifyEmail";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import GroupDashboard from "./pages/GroupDashboard";
+import ChainDashboard from "./pages/ChainDashboard";
+import ChainForm from "./pages/ChainForm";
 
 function App() {
   return (
@@ -21,6 +23,9 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/groups" element={<GroupDashboard />} />
+        <Route path="/chains" element={<ChainDashboard />} />
+        <Route path="/chains/add" element={<ChainForm />} />
+        <Route path="/chains/edit/:id" element={<ChainForm />} />
 
         <Route
           path="/dashboard"

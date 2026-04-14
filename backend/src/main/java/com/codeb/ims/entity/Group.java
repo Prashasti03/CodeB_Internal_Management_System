@@ -37,4 +37,7 @@ public class Group {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
+    private List<Chain> chains;
 }

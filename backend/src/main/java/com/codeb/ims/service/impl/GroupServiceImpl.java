@@ -12,7 +12,11 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+
 public class GroupServiceImpl implements GroupService {
+
+    @Autowired
+    private ChainRepository chainRepository;
 
     private final GroupRepository groupRepository;
 
@@ -56,22 +60,26 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public void deleteGroup(Long id) {
-
-        Group group = groupRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Group not found"));
-
-        // Soft delete
+    public String deleteGroup(Integer groupId) {
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Group not found with ID: " + groupId));
+ 
+        // ✅ NEW CHECK: Does this group have any active chains?
+        boolean hasChains = chainRepository.existsByGroup_GroupIdAndIsActiveTrue(groupId);
+ 
+        if (hasChains) {
+            throw new RuntimeException(
+                "Cannot delete group '" + group.getGroupName() +
+                "' because it has active chains/companies linked to it. " +
+                "Please remove all chains from this group first."
+            );
+        }
+ 
+        // Safe to soft delete the group
         group.setIsActive(false);
-
         groupRepository.save(group);
+        return "Group '" + group.getGroupName() + "' has been deactivated successfully.";
     }
 
-    private GroupResponse mapToResponse(Group group) {
-        return GroupResponse.builder()
-                .groupId(group.getGroupId())
-                .groupName(group.getGroupName())
-                .isActive(group.getIsActive())
-                .build();
-    }
+    
 }

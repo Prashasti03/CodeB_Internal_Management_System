@@ -13,5 +13,5 @@ public interface GroupService {
 
     GroupResponse updateGroup(Long id, GroupRequest request);
 
-    void deleteGroup(Long id);
+    String deleteGroup(Long id);
 }

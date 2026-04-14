@@ -37,4 +37,18 @@ public class GroupController {
         groupService.deleteGroup(id);
         return "Group deactivated successfully";
     }
+
+    // GET /api/groups/active
+    // Returns only active groups — used in Chain Management dropdown
+    @GetMapping("/active")
+    public ResponseEntity<?> getActiveGroups() {
+        try {
+            List<GroupDTO> groups = groupService.getAllActiveGroups();
+            return ResponseEntity.ok(groups);
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        }
+    }
 }

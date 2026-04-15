@@ -307,7 +307,19 @@
 // export default ChainDashboard;
 
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../api/axios";
+import { useNavigate } from "react-router-dom";
+
+const navigate = useNavigate();
+
+useEffect(() => {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    alert("Please login first");
+    navigate("/login");
+  }
+}, []);
 
 const API_BASE = "https://codeb-internal-management-system.onrender.com/api";
 

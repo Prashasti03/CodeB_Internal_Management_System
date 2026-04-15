@@ -5,6 +5,7 @@ import {
   updateGroup,
   deleteGroup,
 } from "../api/groupService";
+import axios from "../api/axios";
 
 function GroupDashboard() {
   const [groups, setGroups] = useState([]);

@@ -24,8 +24,8 @@ function App() {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/groups" element={<GroupDashboard />} />
         <Route path="/chains" element={<ChainDashboard />} />
-        <Route path="/chains/add" element={<ChainForm />} />
-        <Route path="/chains/edit/:id" element={<ChainForm />} />
+        {/* <Route path="/chains/add" element={<ChainForm />} /> */}
+        {/* <Route path="/chains/edit/:id" element={<ChainForm />} /> */}
 
         <Route
           path="/dashboard"

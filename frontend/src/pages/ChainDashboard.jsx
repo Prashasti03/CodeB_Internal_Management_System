@@ -310,20 +310,10 @@ import React, { useEffect, useState } from "react";
 import axios from "../api/axios";
 import { useNavigate } from "react-router-dom";
 
-const navigate = useNavigate();
-
-useEffect(() => {
-  const token = localStorage.getItem("token");
-
-  if (!token) {
-    alert("Please login first");
-    navigate("/login");
-  }
-}, []);
-
 const API_BASE = "https://codeb-internal-management-system.onrender.com/api";
 
 const ChainDashboard = () => {
+  const navigate = useNavigate();
   const [chains, setChains] = useState([]);
   const [groups, setGroups] = useState([]);
   const [form, setForm] = useState({
@@ -333,6 +323,15 @@ const ChainDashboard = () => {
   });
   const [editingId, setEditingId] = useState(null);
   const [selectedGroup, setSelectedGroup] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      alert("Please login first");
+      navigate("/login");
+    }
+  }, []);
 
   // Load groups
   const fetchGroups = async () => {
@@ -428,7 +427,6 @@ const ChainDashboard = () => {
           <h5>{editingId ? "Update Chain" : "Add Chain"}</h5>
           <form onSubmit={handleSubmit}>
             <div className="row">
-
               <div className="col-md-4">
                 <input
                   type="text"
@@ -466,7 +464,6 @@ const ChainDashboard = () => {
                   ))}
                 </select>
               </div>
-
             </div>
 
             <button className="btn btn-primary mt-3">

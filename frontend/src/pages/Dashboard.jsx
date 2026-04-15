@@ -92,6 +92,33 @@ const Dashboard = () => {
           </div>
         )}
 
+        {/* Groups Card (Admin Only) */}
+        {user?.role === "ADMIN" && (
+          <div className="col-md-4">
+            <div className="card shadow-sm border-0 h-100">
+              <div className="card-body">
+                <h5 className="card-title">Chain Management</h5>
+                <p className="card-text text-muted">
+                  Create, update and manage chains.
+                </p>
+                <button
+                  className="btn btn-outline-success btn-sm"
+                  onClick={() => navigate("/chains")}
+                >
+                  Manage Chains
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* <button
+                  className="btn btn-success"
+                  onClick={() => navigate("/chains")}
+                >
+                  Manage Chains
+                </button> */}
+
         {/* General Access */}
         <div className="col-md-4">
           <div className="card shadow-sm border-0 h-100">

@@ -14,5 +14,5 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
 
     List<Group> findByIsActiveTrue();
 
-    boolean existsByChains_GroupIdAndChains_IsActiveTrue(Integer groupId);
+    // boolean existsByChains_GroupIdAndChains_IsActiveTrue(Integer groupId);
 }

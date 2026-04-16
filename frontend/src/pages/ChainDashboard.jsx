@@ -17,7 +17,7 @@ const ChainDashboard = () => {
   const [selectedGroup, setSelectedGroup] = useState("");
   const [error, setError] = useState("");
 
-  // ✅ Auth check
+  // Auth check
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -25,7 +25,7 @@ const ChainDashboard = () => {
     }
   }, [navigate]);
 
-  // ✅ Fetch groups (AXIOS → res.data)
+  // Fetch groups (AXIOS → res.data)
   const fetchGroups = async () => {
     try {
       const res = await getActiveGroups();
@@ -35,15 +35,17 @@ const ChainDashboard = () => {
     }
   };
 
-  // ✅ Fetch chains (FETCH → direct data)
+  // Fetch chains (FETCH → direct data)
   const fetchChains = async () => {
-    try {
-      const data = await chainService.getAllChains();
-      setChains(data); // ✅ FIXED
-    } catch (err) {
-      setError("Failed to load chains");
-    }
-  };
+  try {
+    const res = await chainService.getAllChains();
+    console.log("CHAINS:", res.data); 
+    setChains(res.data); 
+  } catch (err) {
+    console.error(err);
+    setError("Failed to load chains");
+  }
+};
 
   useEffect(() => {
     fetchGroups();
@@ -72,13 +74,14 @@ const ChainDashboard = () => {
       } else {
         await chainService.addChain(form);
         alert("Added successfully");
+        console.log("CHAINS:", res.data);
       }
 
       setForm({ companyName: "", gstnNo: "", groupId: "" });
       setEditingId(null);
       fetchChains();
     } catch (err) {
-      setError(err.message || "Error occurred");
+      setError(err.response?.data?.message || "Error occurred"); 
     }
   };
 
@@ -101,7 +104,7 @@ const ChainDashboard = () => {
       alert("Deleted successfully");
       fetchChains();
     } catch (err) {
-      setError(err.message || "Cannot delete");
+      setError(err.response?.data?.message || "Cannot delete");
     }
   };
 

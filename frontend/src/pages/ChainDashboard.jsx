@@ -17,33 +17,30 @@ const ChainDashboard = () => {
   const [selectedGroup, setSelectedGroup] = useState("");
   const [error, setError] = useState("");
 
-  // 🔐 Check auth
+  // ✅ Auth check
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
-      alert("Please login first");
       navigate("/login");
     }
   }, [navigate]);
 
-  // 📥 Fetch groups
+  // ✅ Fetch groups (AXIOS → res.data)
   const fetchGroups = async () => {
     try {
       const res = await getActiveGroups();
       setGroups(res.data);
     } catch (err) {
-      console.error(err);
       setError("Failed to load groups");
     }
   };
 
-  // 📥 Fetch chains
+  // ✅ Fetch chains (FETCH → direct data)
   const fetchChains = async () => {
     try {
-      const res = await chainService.getAllChains();
-      setChains(res.data);
+      const data = await chainService.getAllChains();
+      setChains(data); // ✅ FIXED
     } catch (err) {
-      console.error(err);
       setError("Failed to load chains");
     }
   };
@@ -53,12 +50,12 @@ const ChainDashboard = () => {
     fetchChains();
   }, []);
 
-  // ✏️ Form input
+  // Form input
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // ➕ Add / Update
+  // Add / Update
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -81,11 +78,11 @@ const ChainDashboard = () => {
       setEditingId(null);
       fetchChains();
     } catch (err) {
-      setError(err.response?.data?.message || "Error occurred");
+      setError(err.message || "Error occurred");
     }
   };
 
-  // ✏️ Edit
+  // Edit
   const handleEdit = (chain) => {
     setForm({
       companyName: chain.companyName,
@@ -95,7 +92,7 @@ const ChainDashboard = () => {
     setEditingId(chain.chainId);
   };
 
-  // 🗑 Delete
+  // Delete
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure?")) return;
 
@@ -104,11 +101,11 @@ const ChainDashboard = () => {
       alert("Deleted successfully");
       fetchChains();
     } catch (err) {
-      setError(err.response?.data?.message || "Cannot delete");
+      setError(err.message || "Cannot delete");
     }
   };
 
-  // 🔍 Filter
+  // Filter
   const filteredChains = selectedGroup
     ? chains.filter((c) => c.groupId === Number(selectedGroup))
     : chains;
@@ -117,10 +114,7 @@ const ChainDashboard = () => {
     <div className="container mt-4">
       <h2 className="mb-4">Chain Management</h2>
 
-      {/* ❗ Error Alert */}
-      {error && (
-        <div className="alert alert-danger">{error}</div>
-      )}
+      {error && <div className="alert alert-danger">{error}</div>}
 
       {/* FORM */}
       <div className="card mb-4">
@@ -129,7 +123,6 @@ const ChainDashboard = () => {
 
           <form onSubmit={handleSubmit}>
             <div className="row">
-
               <div className="col-md-4">
                 <input
                   type="text"
@@ -167,7 +160,6 @@ const ChainDashboard = () => {
                   ))}
                 </select>
               </div>
-
             </div>
 
             <button className="btn btn-primary mt-3">

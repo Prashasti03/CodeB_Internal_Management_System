@@ -37,15 +37,15 @@ const ChainDashboard = () => {
 
   // Fetch chains (FETCH → direct data)
   const fetchChains = async () => {
-  try {
-    const res = await chainService.getAllChains();
-    console.log("CHAINS:", res.data); 
-    setChains(res.data); 
-  } catch (err) {
-    console.error(err);
-    setError("Failed to load chains");
-  }
-};
+    try {
+      const res = await chainService.getAllChains();
+      console.log("CHAINS:", res.data);
+      setChains(res.data);
+    } catch (err) {
+      console.error(err);
+      setError("Failed to load chains");
+    }
+  };
 
   useEffect(() => {
     fetchGroups();
@@ -81,7 +81,7 @@ const ChainDashboard = () => {
       setEditingId(null);
       fetchChains();
     } catch (err) {
-      setError(err.response?.data?.message || "Error occurred"); 
+      setError(err.response?.data?.message || "Error occurred");
     }
   };
 
@@ -110,8 +110,15 @@ const ChainDashboard = () => {
 
   // Filter
   const filteredChains = selectedGroup
-    ? chains.filter((c) => c.group?.groupId === Number(selectedGroup))
+    ? chains.filter(
+        (c) =>
+          Number(c.groupId) === Number(selectedGroup) ||
+          Number(c.group?.groupId) === Number(selectedGroup),
+      )
     : chains;
+
+  console.log("CHAINS:", chains);
+  console.log("SELECTED GROUP:", selectedGroup);
 
   return (
     <div className="container mt-4">
@@ -207,7 +214,7 @@ const ChainDashboard = () => {
                 <td>{c.chainId}</td>
                 <td>{c.companyName}</td>
                 <td>{c.gstnNo}</td>
-                <td>{c.group?.groupName}</td>
+                <td>{c.groupName || c.group?.groupName}</td>
                 <td>
                   <button
                     className="btn btn-warning btn-sm me-2"

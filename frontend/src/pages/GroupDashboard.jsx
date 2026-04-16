@@ -5,7 +5,6 @@ import {
   updateGroup,
   deleteGroup,
 } from "../api/groupService";
-import axios from "../api/axios";
 
 function GroupDashboard() {
   const [groups, setGroups] = useState([]);
@@ -14,8 +13,12 @@ function GroupDashboard() {
   const [error, setError] = useState("");
 
   const fetchGroups = async () => {
-    const res = await getGroups();
-    setGroups(res.data);
+    try {
+      const res = await getGroups();
+      setGroups(res.data);
+    } catch (error) {
+      setError("Failed to load groups");
+    }
   };
 
   useEffect(() => {
@@ -29,7 +32,12 @@ function GroupDashboard() {
       if (editId) {
         await updateGroup(editId, { groupName: name });
       } else {
+        if (!name.trim()) {
+          setError("Group name is required");
+          return;
+        }
         await createGroup({ groupName: name });
+        alert(editId ? "Updated successfully" : "Created successfully");
       }
 
       setName("");
@@ -50,17 +58,17 @@ function GroupDashboard() {
   };
 
   const handleDelete = async (id) => {
-  try {
-    await deleteGroup(id);
-    fetchGroups();
-  } catch (error) {
-    if (error.response && error.response.data) {
-      setError(error.response.data.message || error.response.data);
-    } else {
-      setError("Cannot delete group");
+    try {
+      await deleteGroup(id);
+      fetchGroups();
+    } catch (error) {
+      if (error.response && error.response.data) {
+        setError(error.response.data.message || error.response.data);
+      } else {
+        setError("Cannot delete group");
+      }
     }
-  }
-};
+  };
 
   return (
     <div className="container mt-4">
@@ -104,27 +112,35 @@ function GroupDashboard() {
         </thead>
 
         <tbody>
-          {groups.map((g) => (
-            <tr key={g.groupId}>
-              <td>{g.groupId}</td>
-              <td>{g.groupName}</td>
-              <td>{g.isActive ? "Active" : "Inactive"}</td>
-              <td>
-                <button
-                  className="btn btn-warning me-2"
-                  onClick={() => handleEdit(g)}
-                >
-                  Edit
-                </button>
-                <button
-                  className="btn btn-danger"
-                  onClick={() => handleDelete(g.groupId)}
-                >
-                  Delete
-                </button>
+          {groups.length === 0 ? (
+            <tr>
+              <td colSpan="4" className="text-center">
+                No groups found
               </td>
             </tr>
-          ))}
+          ) : (
+            groups.map((g) => (
+              <tr key={g.groupId}>
+                <td>{g.groupId}</td>
+                <td>{g.groupName}</td>
+                <td>{g.isActive ? "Active" : "Inactive"}</td>
+                <td>
+                  <button
+                    className="btn btn-warning me-2"
+                    onClick={() => handleEdit(g)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => handleDelete(g.groupId)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>

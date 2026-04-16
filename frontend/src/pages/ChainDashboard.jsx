@@ -110,7 +110,7 @@ const ChainDashboard = () => {
 
   // Filter
   const filteredChains = selectedGroup
-    ? chains.filter((c) => c.groupId === Number(selectedGroup))
+    ? chains.filter((c) => c.group?.groupId === Number(selectedGroup))
     : chains;
 
   return (
@@ -207,7 +207,7 @@ const ChainDashboard = () => {
                 <td>{c.chainId}</td>
                 <td>{c.companyName}</td>
                 <td>{c.gstnNo}</td>
-                <td>{c.groupName}</td>
+                <td>{c.group?.groupName}</td>
                 <td>
                   <button
                     className="btn btn-warning btn-sm me-2"

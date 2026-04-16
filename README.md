@@ -1,7 +1,7 @@
 # Internal Management System (IMS)
 
 ## Overview
-This project is an Internal Management System (IMS) designed to manage users, authentication, and role-based access control for Admin and Sales users.
+This project is an Internal Management System (IMS) designed to manage users, authentication, and role-based access control for Admin and Sales users. It includes secure authentication mechanisms and an admin-controlled Group Management module.
 
 ## Features
 
@@ -13,17 +13,28 @@ This project is an Internal Management System (IMS) designed to manage users, au
 - Session Management (Auto Logout)
 - Secure Logout
 
+### Group Management Module (Admin Only)
+- Create new groups
+- Prevent duplicate group creation
+- View all groups
+- Update existing group details
+- Activate / Deactivate groups if no chains are attached to it, else if any is linked with the group, it cannot be deactivated
+- Role-based restriction (Only Admin can manage groups)
+- Proper error handling with user-friendly messages
+
 ## Tech Stack
 Frontend:
 - ReactJS
 - Axios
 - React Router
+- Bootstrap
 
 Backend:
 - Spring Boot
 - Spring Security
 - JWT Authentication
 - MySQL
+- JPA / Hibernate
 
 ## Project Structure
 - frontend/ → React Application
@@ -80,13 +91,29 @@ Deployed on Render - 'https://codeb-internal-management-system.onrender.com'
 
 ---
 
-### 6. Logout
+### 6. Group Management (Admin Only)
+- Navigate to Groups section
+- Add new group
+- Edit existing group
+- Toggle group status (Active/Inactive) based on the condition that no chains are linked to it
+- Duplicate group names are restricted with proper error messages
+
+---
+
+### 7. Logout
 - Click logout button
 - Session cleared securely
 
 ---
 
-### 7. Session Timeout
+### 8. Session Timeout
 - Auto logout after inactivity / token expiry
 
 ---
+
+### 9. Security Features
+- JWT-based authentication
+- Role-based authorization using Spring Security
+- Protected APIs
+- Secure password handling
+- CORS configuration for frontend-backend communication

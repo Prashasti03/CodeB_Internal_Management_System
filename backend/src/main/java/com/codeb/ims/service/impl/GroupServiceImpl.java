@@ -95,7 +95,7 @@ public class GroupServiceImpl implements GroupService {
                 .orElseThrow(() -> new RuntimeException("Group not found with ID: " + groupId));
 
         // CHECK: is group linked with any chain
-        boolean exists = chainRepository.existsByGroupAndIsActiveTrue(group);
+        boolean exists = chainRepository.existsByGroup_GroupIdAndIsActiveTrue(groupId);
 
         if (exists) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
@@ -119,6 +119,7 @@ public class GroupServiceImpl implements GroupService {
         return GroupResponse.builder()
                 .groupId(group.getGroupId())
                 .groupName(group.getGroupName())
+                .isActive(group.getIsActive())
                 .build();
     }
 

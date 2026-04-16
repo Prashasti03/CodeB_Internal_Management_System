@@ -50,9 +50,17 @@ function GroupDashboard() {
   };
 
   const handleDelete = async (id) => {
+  try {
     await deleteGroup(id);
     fetchGroups();
-  };
+  } catch (error) {
+    if (error.response && error.response.data) {
+      setError(error.response.data.message || error.response.data);
+    } else {
+      setError("Cannot delete group");
+    }
+  }
+};
 
   return (
     <div className="container mt-4">

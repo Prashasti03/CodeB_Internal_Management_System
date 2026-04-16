@@ -52,4 +52,6 @@ public interface ChainRepository extends JpaRepository<Chain, Long> {
     boolean existsByGstnNo(String gstnNo);
 
     boolean existsByGroupAndIsActiveTrue(Group group);
+
+    boolean existsByGroup_GroupIdAndIsActiveTrue(Long groupId);
 }

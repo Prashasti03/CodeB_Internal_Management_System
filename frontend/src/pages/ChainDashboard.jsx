@@ -346,7 +346,8 @@ const ChainDashboard = () => {
   // Load chains
   const fetchChains = async () => {
     try {
-      const res = await axios.get(`${API_BASE}/chains`);
+      // const res = await axios.get(`${API_BASE}/chains`);
+      const res = await chainService.getAllChains();
       setChains(res.data);
     } catch (err) {
       console.error(err);

@@ -46,11 +46,12 @@ public String registerUser(RegisterRequest request) {
 
         userRepository.save(user);
 
-        System.out.println("✅ User saved successfully");
+        System.out.println("User saved successfully");
 
-        String link = "https://idyllic-pastelito-b100f6.netlify.app/verify?token=" + token;
+        // String link = "https://idyllic-pastelito-b100f6.netlify.app/verify?token=" + token;
+        String link = "https://code-b-internal-management-system.vercel.app/verify?token=" + token;
 
-        System.out.println("🔗 Verification link: " + link);
+        System.out.println("Verification link: " + link);
 
         emailService.sendEmail(
                 user.getEmail(),

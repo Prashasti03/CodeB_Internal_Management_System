@@ -34,7 +34,8 @@ public class EmailService {
     public void sendResetEmail(String toEmail, String token) {
 
         try {
-            String link = "https://idyllic-pastelito-b100f6.netlify.app/reset-password?token=" + token;
+            // String link = "https://idyllic-pastelito-b100f6.netlify.app/reset-password?token=" + token;
+            String link = "https://code-b-internal-management-system.vercel.app/reset-password?token=" + token;
 
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(toEmail);

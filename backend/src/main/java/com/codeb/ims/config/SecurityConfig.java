@@ -85,7 +85,8 @@ public class SecurityConfig {
 
                 config.setAllowedOrigins(List.of(
                         "http://localhost:5173",
-                        "https://idyllic-pastelito-b100f6.netlify.app"));
+                        "https://idyllic-pastelito-b100f6.netlify.app",
+                        "https://code-b-internal-management-system.vercel.app"));
                 config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                 config.setAllowedHeaders(List.of("*"));
                 config.setAllowCredentials(true);

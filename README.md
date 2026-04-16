@@ -47,7 +47,7 @@ Backend:
 cd frontend
 npm install
 npm run dev
-Deployed on Netlify - 'https://idyllic-pastelito-b100f6.netlify.app'
+Deployed on Vercel - 'https://code-b-internal-management-system.vercel.app'
 
 ### Backend
 cd backend

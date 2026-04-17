@@ -110,12 +110,17 @@ const ChainDashboard = () => {
 
   // Filter
   const filteredChains = selectedGroup
-    ? chains.filter(
-        (c) =>
-          Number(c.groupId) === Number(selectedGroup) ||
-          Number(c.group?.groupId) === Number(selectedGroup),
-      )
-    : chains;
+  ? chains.filter((c) => {
+      const group = groups.find(
+        (g) => g.groupId === Number(selectedGroup)
+      );
+      return (
+        c.groupId === Number(selectedGroup) ||
+        c.group?.groupId === Number(selectedGroup) ||
+        c.groupName === group?.groupName
+      );
+    })
+  : chains;
 
   console.log("CHAINS:", chains);
   console.log("SELECTED GROUP:", selectedGroup);

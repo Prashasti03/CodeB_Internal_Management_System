@@ -5,6 +5,8 @@ import com.codeb.ims.entity.*;
 import com.codeb.ims.repository.*;
 import com.codeb.ims.service.ChainService;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,7 +20,10 @@ public class ChainServiceImpl implements ChainService {
 
     private final ChainRepository chainRepository;
     private final GroupRepository groupRepository;
-    private final BrandRepository brandRepository;
+    // private final BrandRepository brandRepository;
+
+    @Autowired
+    private BrandRepository brandRepository;
 
     @Override
     public ChainResponse addChain(ChainRequest request) {
@@ -73,20 +78,18 @@ public class ChainServiceImpl implements ChainService {
     }
 
     @Override
-    public void deleteChain(Long id) {
+    public void deleteChain(Long chainId) {
 
-        Chain chain = chainRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Chain not found"));
+        boolean hasBrands = brandRepository.existsByChain_ChainIdAndIsActiveTrue(chainId);
 
-        // CHECK brand relation
-        boolean exists = brandRepository.existsByChainAndIsActiveTrue(chain);
-
-        if (exists) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Cannot delete chain. It is linked with brands.");
+        if (hasBrands) {
+            throw new RuntimeException("Cannot delete chain. It has associated brands.");
         }
 
-        chain.setIsActive(false);
+        Chain chain = chainRepository.findById(chainId)
+                .orElseThrow(() -> new RuntimeException("Chain not found"));
+
+        chain.setIsActive(false); // soft delete
         chainRepository.save(chain);
     }
 

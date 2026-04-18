@@ -112,6 +112,26 @@ const Dashboard = () => {
           </div>
         )}
 
+        {/* Brands Card (Admin Only) */}
+        {user?.role === "ADMIN" && (
+          <div className="col-md-4">
+            <div className="card shadow-sm border-0 h-100">
+              <div className="card-body">
+                <h5 className="card-title">Brand Management</h5>
+                <p className="card-text text-muted">
+                  Create, update and manage brands.
+                </p>
+                <button
+                  className="btn btn-outline-success btn-sm"
+                  onClick={() => navigate("/chains")}
+                >
+                  Manage Brands
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* <button
                   className="btn btn-success"
                   onClick={() => navigate("/chains")}

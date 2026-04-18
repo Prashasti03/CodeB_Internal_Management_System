@@ -123,7 +123,7 @@ const Dashboard = () => {
                 </p>
                 <button
                   className="btn btn-outline-success btn-sm"
-                  onClick={() => navigate("/chains")}
+                  onClick={() => navigate("/brands")}
                 >
                   Manage Brands
                 </button>

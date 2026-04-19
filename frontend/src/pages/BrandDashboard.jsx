@@ -226,6 +226,7 @@ export default function BrandDashboard() {
               <th>ID</th>
               <th>Brand</th>
               <th>Company</th>
+              <th>Group</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -236,6 +237,7 @@ export default function BrandDashboard() {
                 <td>{b.brandId}</td>
                 <td>{b.brandName}</td>
                 <td>{b.companyName}</td>
+                <td>{b.groupName}</td>
                 <td>
                   <button
                     className="btn btn-warning btn-sm me-2"

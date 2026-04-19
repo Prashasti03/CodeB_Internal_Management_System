@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api/axios";
 
 export default function BrandDashboard() {
-
-  const API = "https://codeb-internal-management-system.onrender.com/api";
 
   const [brands, setBrands] = useState([]);
   const [groups, setGroups] = useState([]);
@@ -16,6 +14,7 @@ export default function BrandDashboard() {
   const [chainId, setChainId] = useState("");
 
   const [editBrand, setEditBrand] = useState(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchGroups();
@@ -26,18 +25,30 @@ export default function BrandDashboard() {
   // ================= FETCH =================
 
   const fetchGroups = async () => {
-    const res = await axios.get(`${API}/groups`);
-    setGroups(res.data);
+    try {
+      const res = await api.get("/groups");
+      setGroups(res.data);
+    } catch (err) {
+      setError("Failed to load groups");
+    }
   };
 
   const fetchChains = async () => {
-    const res = await axios.get(`${API}/chains`);
-    setChains(res.data);
+    try {
+      const res = await api.get("/chains");
+      setChains(res.data);
+    } catch (err) {
+      setError("Failed to load chains");
+    }
   };
 
   const fetchBrands = async () => {
-    const res = await axios.get(`${API}/brands`);
-    setBrands(res.data);
+    try {
+      const res = await api.get("/brands");
+      setBrands(res.data);
+    } catch (err) {
+      setError("Failed to load brands");
+    }
   };
 
   // ================= FILTER =================
@@ -46,27 +57,35 @@ export default function BrandDashboard() {
     setSelectedGroup(groupId);
     setSelectedChain("");
 
-    if (!groupId) {
-      fetchChains();
-      fetchBrands();
-      return;
-    }
+    try {
+      if (!groupId) {
+        fetchChains();
+        fetchBrands();
+        return;
+      }
 
-    const res = await axios.get(`${API}/chains/group/${groupId}`);
-    setChains(res.data);
-    setBrands([]);
+      const res = await api.get(`/chains/by-group/${groupId}`);
+      setChains(res.data);
+      setBrands([]);
+    } catch (err) {
+      setError("Failed to filter chains");
+    }
   };
 
   const handleChainFilter = async (chainId) => {
     setSelectedChain(chainId);
 
-    if (!chainId) {
-      fetchBrands();
-      return;
-    }
+    try {
+      if (!chainId) {
+        fetchBrands();
+        return;
+      }
 
-    const res = await axios.get(`${API}/brands/chain/${chainId}`);
-    setBrands(res.data);
+      const res = await api.get(`/brands/chain/${chainId}`);
+      setBrands(res.data);
+    } catch (err) {
+      setError("Failed to filter brands");
+    }
   };
 
   // ================= ADD =================
@@ -77,13 +96,13 @@ export default function BrandDashboard() {
       return;
     }
 
-    await axios.post(`${API}/brands`, {
-      brandName,
-      chainId
-    });
-
-    setBrandName("");
-    fetchBrands();
+    try {
+      await api.post("/brands", { brandName, chainId });
+      setBrandName("");
+      fetchBrands();
+    } catch (err) {
+      setError("Failed to add brand");
+    }
   };
 
   // ================= DELETE =================
@@ -91,8 +110,12 @@ export default function BrandDashboard() {
   const deleteBrand = async (id) => {
     if (!window.confirm("Delete this brand?")) return;
 
-    await axios.delete(`${API}/brands/${id}`);
-    fetchBrands();
+    try {
+      await api.delete(`/brands/${id}`);
+      fetchBrands();
+    } catch (err) {
+      setError("Cannot delete brand");
+    }
   };
 
   // ================= UPDATE =================
@@ -102,19 +125,25 @@ export default function BrandDashboard() {
   };
 
   const updateBrand = async () => {
-    await axios.put(`${API}/brands/${editBrand.brandId}`, {
-      brandName: editBrand.brandName,
-      chainId: editBrand.chainId
-    });
+    try {
+      await api.put(`/brands/${editBrand.brandId}`, {
+        brandName: editBrand.brandName,
+        chainId: editBrand.chainId,
+      });
 
-    setEditBrand(null);
-    fetchBrands();
+      setEditBrand(null);
+      fetchBrands();
+    } catch (err) {
+      setError("Failed to update brand");
+    }
   };
 
   return (
     <div className="container mt-4">
 
       <h2 className="mb-4">Brand Management</h2>
+
+      {error && <div className="alert alert-danger">{error}</div>}
 
       {/* FILTER SECTION */}
       <div className="card p-3 mb-4">
@@ -172,7 +201,7 @@ export default function BrandDashboard() {
               className="form-control"
               onChange={(e) => setChainId(e.target.value)}
             >
-              <option>Select Company</option>
+              <option value="">Select Company</option>
               {chains.map(c => (
                 <option key={c.chainId} value={c.chainId}>
                   {c.companyName}

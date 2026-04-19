@@ -8,4 +8,5 @@ public class BrandResponse {
     private String brandName;
     private Long chainId;
     private String companyName;
+    private String groupName;
 }

@@ -95,7 +95,8 @@ public class BrandServiceImpl implements BrandService {
         res.setBrandId(brand.getBrandId());
         res.setBrandName(brand.getBrandName());
         res.setChainId(brand.getChain().getChainId());
-        res.setCompanyName(brand.getChain().getCompanyName());
+         res.setCompanyName(brand.getChain().getCompanyName());
+        res.setGroupName(brand.getChain().getGroup().getGroupName());
         return res;
     }
 }

@@ -64,7 +64,7 @@ export default function BrandDashboard() {
         return;
       }
 
-      const res = await api.get(`/chains/by-group/${groupId}`);
+      const res = await api.get(`/chains/group/${groupId}`);
       setChains(res.data);
       setBrands([]);
     } catch (err) {

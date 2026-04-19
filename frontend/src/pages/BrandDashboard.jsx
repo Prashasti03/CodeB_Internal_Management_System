@@ -54,23 +54,28 @@ export default function BrandDashboard() {
   // ================= FILTER =================
 
   const handleGroupFilter = async (groupId) => {
-    setSelectedGroup(groupId);
-    setSelectedChain("");
+  setSelectedGroup(groupId);
+  setSelectedChain("");
 
-    try {
-      if (!groupId) {
-        fetchChains();
-        fetchBrands();
-        return;
-      }
-
-      const res = await api.get(`/chains/group/${groupId}`);
-      setChains(res.data);
-      setBrands([]);
-    } catch (err) {
-      setError("Failed to filter chains");
+  try {
+    if (!groupId) {
+      fetchChains();
+      fetchBrands();
+      return;
     }
-  };
+
+    // get chains of that group
+    const chainRes = await api.get(`/chains/group/${groupId}`);
+    setChains(chainRes.data);
+
+    // ALSO fetch brands again
+    const brandRes = await api.get("/brands");
+    setBrands(brandRes.data);
+
+  } catch (err) {
+    setError("Failed to filter chains");
+  }
+};
 
   const handleChainFilter = async (chainId) => {
     setSelectedChain(chainId);

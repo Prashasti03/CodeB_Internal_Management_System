@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import api from "../api/axios";
 
 export default function BrandDashboard() {
-
   const [brands, setBrands] = useState([]);
   const [groups, setGroups] = useState([]);
   const [chains, setChains] = useState([]);
@@ -54,28 +53,27 @@ export default function BrandDashboard() {
   // ================= FILTER =================
 
   const handleGroupFilter = async (groupId) => {
-  setSelectedGroup(groupId);
-  setSelectedChain("");
+    setSelectedGroup(groupId);
+    setSelectedChain("");
 
-  try {
-    if (!groupId) {
-      fetchChains();
-      fetchBrands();
-      return;
+    try {
+      if (!groupId) {
+        fetchChains();
+        fetchBrands();
+        return;
+      }
+
+      // get chains of that group
+      const chainRes = await api.get(`/chains/group/${groupId}`);
+      setChains(chainRes.data);
+
+      // ALSO fetch brands again
+      const brandRes = await api.get("/brands");
+      setBrands(brandRes.data);
+    } catch (err) {
+      setError("Failed to filter chains");
     }
-
-    // get chains of that group
-    const chainRes = await api.get(`/chains/group/${groupId}`);
-    setChains(chainRes.data);
-
-    // ALSO fetch brands again
-    const brandRes = await api.get("/brands");
-    setBrands(brandRes.data);
-
-  } catch (err) {
-    setError("Failed to filter chains");
-  }
-};
+  };
 
   const handleChainFilter = async (chainId) => {
     setSelectedChain(chainId);
@@ -145,7 +143,6 @@ export default function BrandDashboard() {
 
   return (
     <div className="container mt-4">
-
       <h2 className="mb-4">Brand Management</h2>
 
       {error && <div className="alert alert-danger">{error}</div>}
@@ -153,7 +150,6 @@ export default function BrandDashboard() {
       {/* FILTER SECTION */}
       <div className="card p-3 mb-4">
         <div className="row">
-
           <div className="col-md-6">
             <label>Filter by Group</label>
             <select
@@ -161,7 +157,7 @@ export default function BrandDashboard() {
               onChange={(e) => handleGroupFilter(e.target.value)}
             >
               <option value="">All Groups</option>
-              {groups.map(g => (
+              {groups.map((g) => (
                 <option key={g.groupId} value={g.groupId}>
                   {g.groupName}
                 </option>
@@ -176,14 +172,13 @@ export default function BrandDashboard() {
               onChange={(e) => handleChainFilter(e.target.value)}
             >
               <option value="">All Companies</option>
-              {chains.map(c => (
+              {chains.map((c) => (
                 <option key={c.chainId} value={c.chainId}>
                   {c.companyName}
                 </option>
               ))}
             </select>
           </div>
-
         </div>
       </div>
 
@@ -207,7 +202,7 @@ export default function BrandDashboard() {
               onChange={(e) => setChainId(e.target.value)}
             >
               <option value="">Select Company</option>
-              {chains.map(c => (
+              {chains.map((c) => (
                 <option key={c.chainId} value={c.chainId}>
                   {c.companyName}
                 </option>
@@ -237,29 +232,39 @@ export default function BrandDashboard() {
           </thead>
 
           <tbody>
-            {brands.map(b => (
-              <tr key={b.brandId}>
-                <td>{b.brandId}</td>
-                <td>{b.brandName}</td>
-                <td>{b.companyName}</td>
-                <td>{b.groupName}</td>
-                <td>
-                  <button
-                    className="btn btn-warning btn-sm me-2"
-                    onClick={() => openEdit(b)}
-                  >
-                    Edit
-                  </button>
+            {brands
+              .filter((b) => {
+                if (!selectedGroup) return true;
 
-                  <button
-                    className="btn btn-danger btn-sm"
-                    onClick={() => deleteBrand(b.brandId)}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
+                const selectedGroupObj = groups.find(
+                  (g) => g.groupId === Number(selectedGroup),
+                );
+
+                return b.groupName === selectedGroupObj?.groupName;
+              })
+              .map((b) => (
+                <tr key={b.brandId}>
+                  <td>{b.brandId}</td>
+                  <td>{b.brandName}</td>
+                  <td>{b.companyName}</td>
+                  <td>{b.groupName}</td>
+                  <td>
+                    <button
+                      className="btn btn-warning btn-sm me-2"
+                      onClick={() => openEdit(b)}
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={() => deleteBrand(b.brandId)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
@@ -269,7 +274,6 @@ export default function BrandDashboard() {
         <div className="modal show d-block">
           <div className="modal-dialog">
             <div className="modal-content p-3">
-
               <h5>Edit Brand</h5>
 
               <input
@@ -287,7 +291,7 @@ export default function BrandDashboard() {
                   setEditBrand({ ...editBrand, chainId: e.target.value })
                 }
               >
-                {chains.map(c => (
+                {chains.map((c) => (
                   <option key={c.chainId} value={c.chainId}>
                     {c.companyName}
                   </option>
@@ -302,19 +306,14 @@ export default function BrandDashboard() {
                   Cancel
                 </button>
 
-                <button
-                  className="btn btn-success"
-                  onClick={updateBrand}
-                >
+                <button className="btn btn-success" onClick={updateBrand}>
                   Update
                 </button>
               </div>
-
             </div>
           </div>
         </div>
       )}
-
     </div>
   );
 }

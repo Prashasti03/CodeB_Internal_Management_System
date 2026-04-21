@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { getZones, createZone, deleteZone } from "../api/zoneService";
-import { getBrands } from "../api/brandService";
+import { getZones, createZone, deleteZone } from "../api/zoneService.js";
+// import { getBrands } from "../api/brandService.js";
+import {getBrands} from "../api/brandService.js"
 
 function ZoneDashboard() {
   const [zones, setZones] = useState([]);

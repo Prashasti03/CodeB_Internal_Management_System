@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
-import { getZones, createZone, deleteZone } from "../api/zoneService.js";
+import {
+  getZones,
+  createZone,
+  deleteZone,
+  filterZones,
+} from "../api/zoneService.js";
 // import { getBrands } from "../api/brandService.js";
 import { getBrands } from "../api/brandService.js";
-import {getGroups} from "../api/groupService";
+import { getGroups } from "../api/groupService";
 import chainService from "../api/chainService";
 
 function ZoneDashboard() {
@@ -35,12 +40,14 @@ function ZoneDashboard() {
   };
 
   const fetchGroups = async () => {
-    const res = await groupService.getGroups();
+    const res = await getGroups();
+    console.log("Groups:", res.data);
     setGroups(res.data);
   };
 
   const fetchChains = async () => {
-    const res = await chainService.getChains();
+    const res = await chainService.getAllChains();
+    console.log("Chains:", res.data);
     setChains(res.data);
   };
 
@@ -62,14 +69,20 @@ function ZoneDashboard() {
   };
 
   const handleFilter = async () => {
-    const params = new URLSearchParams();
+    try {
+      const params = new URLSearchParams();
 
-    if (selectedGroup) params.append("groupId", selectedGroup);
-    if (selectedChain) params.append("chainId", selectedChain);
-    if (selectedBrand) params.append("brandId", selectedBrand);
+      if (selectedGroup) params.append("groupId", selectedGroup);
+      if (selectedChain) params.append("chainId", selectedChain);
+      if (selectedBrand) params.append("brandId", selectedBrand);
 
-    const res = await api.get(`/zones/filter?${params.toString()}`);
-    setZones(res.data);
+      // const res = await api.get(`/zones/filter?${params.toString()}`);
+      const res = await filterZones(params.toString());
+      setZones(res.data);
+    } catch (err) {
+      console.error(err);
+      alert("Filter failed");
+    }
   };
 
   const handleEdit = (zone) => {

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { getZones, createZone, deleteZone } from "../api/zoneService.js";
 // import { getBrands } from "../api/brandService.js";
 import { getBrands } from "../api/brandService.js";
+import groupService from "../api/groupService";
+import chainService from "../api/chainService";
 
 function ZoneDashboard() {
   const [zones, setZones] = useState([]);
@@ -12,10 +14,14 @@ function ZoneDashboard() {
   const [selectedChain, setSelectedChain] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
   const [editId, setEditId] = useState(null);
+  const [groups, setGroups] = useState([]);
+  const [chains, setChains] = useState([]);
 
   useEffect(() => {
     fetchZones();
     fetchBrands();
+    fetchGroups();
+    fetchChains();
   }, []);
 
   const fetchZones = async () => {
@@ -26,6 +32,16 @@ function ZoneDashboard() {
   const fetchBrands = async () => {
     const res = await getBrands();
     setBrands(res.data);
+  };
+
+  const fetchGroups = async () => {
+    const res = await groupService.getGroups();
+    setGroups(res.data);
+  };
+
+  const fetchChains = async () => {
+    const res = await chainService.getChains();
+    setChains(res.data);
   };
 
   const handleAdd = async () => {

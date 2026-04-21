@@ -1,19 +1,15 @@
 import api from "./axios";
 
-const brandService = {
-  getAllBrands: () => api.get("/brands"),
+export const getBrands = () => api.get("/brands");
 
-  getBrandsByChain: (chainId) =>
-    api.get(`/brands/chain/${chainId}`),
+export const getBrandsByChain = (chainId) =>
+  api.get(`/brands/chain/${chainId}`);
 
-  addBrand: (data) =>
-    api.post("/brands", data),
+export const addBrand = (data) =>
+  api.post("/brands", data);
 
-  updateBrand: (id, data) =>
-    api.put(`/brands/${id}`, data),
+export const updateBrand = (id, data) =>
+  api.put(`/brands/${id}`, data);
 
-  deleteBrand: (id) =>
-    api.delete(`/brands/${id}`),
-};
-
-export default brandService;
+export const deleteBrand = (id) =>
+  api.delete(`/brands/${id}`);

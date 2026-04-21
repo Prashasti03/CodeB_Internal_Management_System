@@ -210,6 +210,19 @@ const Navbar = () => {
                   </li>
                 )}
 
+                {/* Admin Link */}
+                {user?.role === "ADMIN" && (
+                  <li className="nav-item">
+                    <span
+                      className="nav-link"
+                      onClick={() => navigate("/zones")}
+                      style={{ cursor: "pointer" }}
+                    >
+                      Zones
+                    </span>
+                  </li>
+                )}
+
                 {/* Logout */}
                 <li className="nav-item">
                   <button

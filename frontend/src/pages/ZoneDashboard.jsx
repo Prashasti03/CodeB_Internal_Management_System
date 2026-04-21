@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getZones, createZone, deleteZone } from "../api/zoneService.js";
 // import { getBrands } from "../api/brandService.js";
 import { getBrands } from "../api/brandService.js";
-import groupService from "../api/groupService";
+import {getGroups} from "../api/groupService";
 import chainService from "../api/chainService";
 
 function ZoneDashboard() {

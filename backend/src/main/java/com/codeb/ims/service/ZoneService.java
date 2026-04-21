@@ -10,4 +10,5 @@ public interface ZoneService {
     List<ZoneResponse> getAllZones();
     ZoneResponse updateZone(Long id, ZoneRequest request);
     void deleteZone(Long id);
+    List<ZoneResponse> filterZones(Long brandId, Long chainId, Long groupId);
 }

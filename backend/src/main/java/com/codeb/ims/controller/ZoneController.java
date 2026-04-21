@@ -34,4 +34,13 @@ public class ZoneController {
     public void delete(@PathVariable Long id) {
         zoneService.deleteZone(id);
     }
+
+    @GetMapping("/filter")
+public List<ZoneResponse> filterZones(
+        @RequestParam(required = false) Long brandId,
+        @RequestParam(required = false) Long chainId,
+        @RequestParam(required = false) Long groupId
+) {
+    return zoneService.filterZones(brandId, chainId, groupId);
+}
 }

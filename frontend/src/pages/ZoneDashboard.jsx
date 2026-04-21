@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
 import { getZones, createZone, deleteZone } from "../api/zoneService.js";
 // import { getBrands } from "../api/brandService.js";
-import {getBrands} from "../api/brandService.js"
+import { getBrands } from "../api/brandService.js";
 
 function ZoneDashboard() {
   const [zones, setZones] = useState([]);
   const [brands, setBrands] = useState([]);
   const [zoneName, setZoneName] = useState("");
   const [brandId, setBrandId] = useState("");
+  const [selectedGroup, setSelectedGroup] = useState("");
+  const [selectedChain, setSelectedChain] = useState("");
+  const [selectedBrand, setSelectedBrand] = useState("");
+  const [editId, setEditId] = useState(null);
 
   useEffect(() => {
     fetchZones();
@@ -41,6 +45,38 @@ function ZoneDashboard() {
     fetchZones();
   };
 
+  const handleFilter = async () => {
+    const params = new URLSearchParams();
+
+    if (selectedGroup) params.append("groupId", selectedGroup);
+    if (selectedChain) params.append("chainId", selectedChain);
+    if (selectedBrand) params.append("brandId", selectedBrand);
+
+    const res = await api.get(`/zones/filter?${params.toString()}`);
+    setZones(res.data);
+  };
+
+  const handleEdit = (zone) => {
+    setZoneName(zone.zoneName);
+    setBrandId(zone.brandId); // IMPORTANT → you must include brandId in response
+    setEditId(zone.zoneId);
+  };
+
+  const handleSubmit = async () => {
+    if (!zoneName || !brandId) return alert("All fields required");
+
+    if (editId) {
+      await updateZone(editId, { zoneName, brandId });
+    } else {
+      await createZone({ zoneName, brandId });
+    }
+
+    setEditId(null);
+    setZoneName("");
+    setBrandId("");
+    fetchZones();
+  };
+
   return (
     <div className="container mt-4">
       <h3>Zone Management</h3>
@@ -66,9 +102,59 @@ function ZoneDashboard() {
           ))}
         </select>
 
-        <button className="btn btn-primary" onClick={handleAdd}>
-          Add Zone
+        <button className="btn btn-primary" onClick={handleSubmit}>
+          {editId ? "Update Zone" : "Add Zone"}
         </button>
+      </div>
+
+      <div className="row mb-3">
+        <div className="col">
+          <select
+            className="form-control"
+            onChange={(e) => setSelectedGroup(e.target.value)}
+          >
+            <option value="">Filter by Group</option>
+            {groups.map((g) => (
+              <option key={g.groupId} value={g.groupId}>
+                {g.groupName}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="col">
+          <select
+            className="form-control"
+            onChange={(e) => setSelectedChain(e.target.value)}
+          >
+            <option value="">Filter by Company</option>
+            {chains.map((c) => (
+              <option key={c.chainId} value={c.chainId}>
+                {c.companyName}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="col">
+          <select
+            className="form-control"
+            onChange={(e) => setSelectedBrand(e.target.value)}
+          >
+            <option value="">Filter by Brand</option>
+            {brands.map((b) => (
+              <option key={b.brandId} value={b.brandId}>
+                {b.brandName}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="col">
+          <button className="btn btn-primary w-100" onClick={handleFilter}>
+            Apply Filters
+          </button>
+        </div>
       </div>
 
       <table className="table table-bordered">
@@ -89,6 +175,12 @@ function ZoneDashboard() {
               <td>{z.companyName}</td>
               <td>{z.groupName}</td>
               <td>
+                <button
+                  className="btn btn-warning btn-sm me-2"
+                  onClick={() => handleEdit(z)}
+                >
+                  Edit
+                </button>
                 <button
                   className="btn btn-danger btn-sm"
                   onClick={() => handleDelete(z.zoneId)}

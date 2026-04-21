@@ -11,4 +11,5 @@ public class ZoneResponse {
     private String brandName;
     private String companyName;
     private String groupName;
+    private Long brandId;
 }

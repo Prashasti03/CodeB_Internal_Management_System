@@ -4,6 +4,7 @@ import {
   createZone,
   deleteZone,
   filterZones,
+  updateZone
 } from "../api/zoneService.js";
 // import { getBrands } from "../api/brandService.js";
 import { getBrands } from "../api/brandService.js";

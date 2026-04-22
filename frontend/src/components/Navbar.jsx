@@ -223,6 +223,18 @@ const Navbar = () => {
                   </li>
                 )}
 
+                {user?.role === "ADMIN" || user?.role === "SALES" && (
+                  <li className="nav-item">
+                    <span
+                      className="nav-link"
+                      onClick={() => navigate("/estimates")}
+                      style={{ cursor: "pointer" }}
+                    >
+                      Estimates
+                    </span>
+                  </li>
+                )}
+
                 {/* Logout */}
                 <li className="nav-item">
                   <button

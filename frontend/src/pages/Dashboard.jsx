@@ -152,6 +152,25 @@ const Dashboard = () => {
           </div>
         )}
 
+        {user?.role === "ADMIN" || user?.role === "SALES" && (
+          <div className="col-md-4">
+            <div className="card shadow-sm border-0 h-100">
+              <div className="card-body">
+                <h5 className="card-title">Estimate Management</h5>
+                <p className="card-text text-muted">
+                  Create, update and manage estimates.
+                </p>
+                <button
+                  className="btn btn-outline-success btn-sm"
+                  onClick={() => navigate("/estimates")}
+                >
+                  Manage Estimates
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* <button
                   className="btn btn-success"
                   onClick={() => navigate("/chains")}

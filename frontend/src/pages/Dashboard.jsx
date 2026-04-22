@@ -152,7 +152,7 @@ const Dashboard = () => {
           </div>
         )}
 
-        {user?.role === "ADMIN" || user?.role === "SALES" && (
+        
           <div className="col-md-4">
             <div className="card shadow-sm border-0 h-100">
               <div className="card-body">
@@ -169,7 +169,7 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-        )}
+        
 
         {/* <button
                   className="btn btn-success"

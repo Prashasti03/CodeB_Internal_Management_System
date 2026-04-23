@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   getEstimates,
   createEstimate,
@@ -7,6 +8,7 @@ import {
 } from "../api/estimateService";
 
 const EstimateDashboard = () => {
+  const navigate = useNavigate();
   const [estimates, setEstimates] = useState([]);
   const [form, setForm] = useState({
     chainId: "",
@@ -231,13 +233,13 @@ const EstimateDashboard = () => {
                 </button>
 
                 <button
-                  className="btn btn-danger btn-sm"
+                  className="btn btn-danger btn-sm me-2"
                   onClick={() => handleDelete(e.estimatedId)}
                 >
                   Delete
                 </button>
                 <button
-                  className="btn btn-success"
+                  className="btn btn-success btn-sm"
                   onClick={() =>
                     navigate(`/generate-invoice/${est.estimatedId}`)
                   }

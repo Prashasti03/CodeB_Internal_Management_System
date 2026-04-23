@@ -245,6 +245,16 @@ const Navbar = () => {
                       Estimates
                     </span>
                   </li>
+
+                  <li className="nav-item">
+                    <span
+                      className="nav-link"
+                      onClick={() => navigate("/invoices")}
+                      style={{ cursor: "pointer" }}
+                    >
+                      Invoices
+                    </span>
+                  </li>
                 
 
                 {/* Logout */}

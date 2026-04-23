@@ -13,6 +13,8 @@ import ChainForm from "./pages/ChainForm";
 import BrandDashboard from "./pages/BrandDashboard";
 import ZoneDashboard from "./pages/ZoneDashboard";
 import EstimateDashboard from "./pages/EstimateDashboard";
+import GenerateInvoice from "./pages/GenerateInvoice";
+import InvoiceDashboard from "./pages/InvoiceDashboard";
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
         <Route path="/brands" element={<BrandDashboard />} />
         <Route path="/zones" element={<ZoneDashboard />} />
         <Route path="/estimates" element={<EstimateDashboard />} />
+        <Route path="/generate-invoice/:id" element={<GenerateInvoice />} />
+<Route path="/invoices" element={<InvoiceDashboard />} />
         {/* <Route path="/chains/add" element={<ChainForm />} /> */}
         {/* <Route path="/chains/edit/:id" element={<ChainForm />} /> */}
 

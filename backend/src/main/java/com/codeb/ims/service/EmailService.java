@@ -21,6 +21,8 @@ public class EmailService {
             message.setSubject(subject);
             message.setText(body);
 
+            message.setFrom("dhanorkarprashasti@gmail.com");
+
             mailSender.send(message);
 
             System.out.println("Email sent successfully to: " + to);

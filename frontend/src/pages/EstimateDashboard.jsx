@@ -167,6 +167,7 @@ const EstimateDashboard = () => {
           </div>
 
           <div className="col-md-3">
+            <label>Deliver Date: </label>
             <input
               type="date"
               className="form-control"
@@ -200,7 +201,7 @@ const EstimateDashboard = () => {
         <thead>
           <tr>
             <th>ID</th>
-            <th>Chain</th>
+            <th>Chain ID</th>
             <th>Service</th>
             <th>Qty</th>
             <th>Cost</th>
@@ -234,6 +235,14 @@ const EstimateDashboard = () => {
                   onClick={() => handleDelete(e.estimatedId)}
                 >
                   Delete
+                </button>
+                <button
+                  className="btn btn-success"
+                  onClick={() =>
+                    navigate(`/generate-invoice/${est.estimatedId}`)
+                  }
+                >
+                  Generate Invoice
                 </button>
               </td>
             </tr>

@@ -6,7 +6,15 @@ import api from "./axios";
 // };
 
 export const generateInvoice = (estimateId, email) => {
-  return api.post(`/invoices/generate/${estimateId}`, email);
+  return api.post(
+    `/invoices/generate/${estimateId}`,
+    email,
+    {
+      headers: {
+        "Content-Type": "text/plain",
+      },
+    }
+  );
 };
 
 // Get all invoices

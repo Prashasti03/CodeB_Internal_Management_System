@@ -25,6 +25,8 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public Invoice generateInvoice(Long estimateId, String email) {
 
+        email = java.net.URLDecoder.decode(email, java.nio.charset.StandardCharsets.UTF_8);
+
         Estimate est = estimateRepository.findById(estimateId)
                 .orElseThrow(() -> new RuntimeException("Estimate not found"));
 
@@ -46,6 +48,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 .build();
 
         Invoice saved = invoiceRepository.save(invoice);
+        System.out.println("EMAIL RECEIVED: " + email);
 
         // Generate PDF
         byte[] pdf = PdfGenerator.generateInvoicePdf(saved);

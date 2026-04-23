@@ -23,3 +23,9 @@ export const deleteInvoice = (id) => {
 export const updateInvoiceEmail = (id, email) => {
   return api.put(`/invoices/${id}?email=${email}`);
 };
+
+export const downloadInvoice = (id) => {
+  return api.get(`/invoices/download/${id}`, {
+    responseType: "blob",
+  });
+};

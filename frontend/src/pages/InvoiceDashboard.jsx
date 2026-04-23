@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { getInvoices, deleteInvoice } from "../api/invoiceService";
+import axios from "../api/axios";
+import {
+  getInvoices,
+  deleteInvoice,
+  downloadInvoice,
+} from "../api/invoiceService";
 
 export default function InvoiceDashboard() {
   const [data, setData] = useState([]);
@@ -20,15 +25,13 @@ export default function InvoiceDashboard() {
     }
   };
 
-  const downloadInvoice = async (id) => {
-    const res = await axios.get(`/invoices/download/${id}`, {
-      responseType: "blob",
-    });
+  const handleDownload = async (id) => {
+    const res = await downloadInvoice(id);
 
     const url = window.URL.createObjectURL(new Blob([res.data]));
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", "invoice.pdf");
+    link.setAttribute("download", "invoice-${id}.pdf");
     document.body.appendChild(link);
     link.click();
   };
@@ -55,13 +58,13 @@ export default function InvoiceDashboard() {
               <td>{i.emailId}</td>
               <td>
                 <button
-                  className="btn btn-primary"
-                  onClick={() => downloadInvoice(i.id)}
+                  className="btn btn-primary btn-sm me-2"
+                  onClick={() => handleDownload(i.id)}
                 >
                   Download
                 </button>
                 <button
-                  className="btn btn-danger"
+                  className="btn btn-danger btn-sm"
                   onClick={() => deleteInvoice(i.id)}
                 >
                   Delete

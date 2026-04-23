@@ -8,8 +8,9 @@ export default function GenerateInvoice() {
   const [email, setEmail] = useState("");
 
   const handleGenerate = async () => {
-    await generateInvoice(id, email);
+    await generateInvoice(id, decodeURIComponent(email));
     alert("Invoice Generated!");
+    console.log("Sending email:", email);
   };
 
   return (

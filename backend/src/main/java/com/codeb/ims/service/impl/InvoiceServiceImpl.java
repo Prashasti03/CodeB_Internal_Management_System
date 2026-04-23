@@ -8,6 +8,7 @@ import com.codeb.ims.service.EmailService;
 import com.codeb.ims.service.InvoiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.codeb.ims.util.PdfGenerator;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -46,12 +47,15 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         Invoice saved = invoiceRepository.save(invoice);
 
-        // Send Email (simple)
-        emailService.sendEmail(
+        // Generate PDF
+        byte[] pdf = PdfGenerator.generateInvoicePdf(saved);
+
+        // Send Email with attachment
+        emailService.sendEmailWithAttachment(
                 email,
                 "Invoice Generated",
-                "Your invoice number is: " + invoiceNo);
-                
+                "Please find attached invoice.",
+                pdf);
 
         return saved;
     }

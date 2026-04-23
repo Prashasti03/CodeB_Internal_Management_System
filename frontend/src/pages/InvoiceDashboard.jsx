@@ -20,6 +20,19 @@ export default function InvoiceDashboard() {
     }
   };
 
+  const downloadInvoice = async (id) => {
+    const res = await axios.get(`/invoices/download/${id}`, {
+      responseType: "blob",
+    });
+
+    const url = window.URL.createObjectURL(new Blob([res.data]));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "invoice.pdf");
+    document.body.appendChild(link);
+    link.click();
+  };
+
   return (
     <div className="container mt-4">
       <h3>Invoices</h3>
@@ -41,6 +54,12 @@ export default function InvoiceDashboard() {
               <td>{i.estimatedId}</td>
               <td>{i.emailId}</td>
               <td>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => downloadInvoice(i.id)}
+                >
+                  Download
+                </button>
                 <button
                   className="btn btn-danger"
                   onClick={() => deleteInvoice(i.id)}

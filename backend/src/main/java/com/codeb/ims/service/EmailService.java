@@ -1,9 +1,14 @@
 package com.codeb.ims.service;
 
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
+import jakarta.mail.internet.MimeMessage;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +41,8 @@ public class EmailService {
     public void sendResetEmail(String toEmail, String token) {
 
         try {
-            // String link = "https://idyllic-pastelito-b100f6.netlify.app/reset-password?token=" + token;
+            // String link =
+            // "https://idyllic-pastelito-b100f6.netlify.app/reset-password?token=" + token;
             String link = "https://code-b-internal-management-system.vercel.app/reset-password?token=" + token;
 
             SimpleMailMessage message = new SimpleMailMessage();
@@ -50,6 +56,25 @@ public class EmailService {
 
         } catch (Exception e) {
             System.out.println("❌ Reset email failed!");
+            e.printStackTrace();
+        }
+    }
+
+    public void sendEmailWithAttachment(String to, String subject, String text, byte[] pdf) {
+
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(text);
+
+            helper.addAttachment("invoice.pdf", new ByteArrayResource(pdf));
+
+            mailSender.send(message);
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

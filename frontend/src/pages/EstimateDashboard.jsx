@@ -214,7 +214,17 @@ const EstimateDashboard = () => {
         </thead>
 
         <tbody>
-          {estimates.map((e) => (
+          {/* {estimates.map((e) => (
+            <tr key={e.estimatedId}>
+              <td>{e.estimatedId}</td>
+              <td>{e.chainId}</td>
+              <td>{e.service}</td>
+              <td>{e.qty}</td>
+              <td>{e.costPerUnit}</td>
+              <td>{e.totalCost}</td>
+              <td>{e.deliveryDate}</td> */}
+
+              {estimates.map((est) => (
             <tr key={e.estimatedId}>
               <td>{e.estimatedId}</td>
               <td>{e.chainId}</td>

@@ -53,6 +53,8 @@ public class InvoiceServiceImpl implements InvoiceService {
         // Generate PDF
         byte[] pdf = PdfGenerator.generateInvoicePdf(saved);
 
+        System.out.println("1. Sending invoice email with attachment...");
+
         // Send Email with attachment
         emailService.sendEmailWithAttachment(
                 email,

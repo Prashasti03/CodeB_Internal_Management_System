@@ -9,3 +9,8 @@ export const updateEstimate = (id, data) =>
 
 export const deleteEstimate = (id) =>
   api.delete(`/estimates/${id}`);
+
+export const getChains = () => api.get("/chains");
+export const getBrands = () => api.get("/brands");
+export const getZones = () => api.get("/zones");
+export const getGroups = () => api.get("/groups");

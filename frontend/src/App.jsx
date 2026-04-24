@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -19,6 +20,7 @@ import InvoiceDashboard from "./pages/InvoiceDashboard";
 function App() {
   return (
     <BrowserRouter>
+    <ToastContainer position="top-right" autoClose={3000} />
       <Navbar />
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />

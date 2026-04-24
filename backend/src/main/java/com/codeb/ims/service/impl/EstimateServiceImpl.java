@@ -24,6 +24,7 @@ public class EstimateServiceImpl implements EstimateService {
 
         Estimate estimate = Estimate.builder()
                 .chainId(request.getChainId())
+                .chainName(request.getChainName())
                 .groupName(request.getGroupName())
                 .brandName(request.getBrandName())
                 .zoneName(request.getZoneName())
@@ -57,6 +58,7 @@ public class EstimateServiceImpl implements EstimateService {
                 .orElseThrow(() -> new RuntimeException("Estimate not found"));
 
         estimate.setChainId(request.getChainId());
+        estimate.setChainName(request.getChainName());
         estimate.setGroupName(request.getGroupName());
         estimate.setBrandName(request.getBrandName());
         estimate.setZoneName(request.getZoneName());

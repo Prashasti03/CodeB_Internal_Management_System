@@ -7,6 +7,7 @@ import java.time.LocalDate;
 public class EstimateRequest {
 
     private Long chainId;
+    private String chainName;
 
     private String groupName;
     private String brandName;

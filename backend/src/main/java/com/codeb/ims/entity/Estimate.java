@@ -20,6 +20,7 @@ public class Estimate {
     private Long estimatedId;
 
     private Long chainId;
+    private String chainName;
 
     private String groupName;
     private String brandName;

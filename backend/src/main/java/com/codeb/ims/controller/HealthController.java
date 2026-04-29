@@ -8,6 +8,6 @@ public class HealthController {
 
     @GetMapping("/")
     public String health() {
-        return "IMS Backend Running ✅";
+        return "IMS Backend Running";
     }
 }

@@ -20,7 +20,7 @@ import InvoiceDashboard from "./pages/InvoiceDashboard";
 function App() {
   return (
     <BrowserRouter>
-    <ToastContainer position="top-right" autoClose={3000} />
+      <ToastContainer position="top-right" autoClose={3000} />
       <Navbar />
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
@@ -35,7 +35,7 @@ function App() {
         <Route path="/zones" element={<ZoneDashboard />} />
         <Route path="/estimates" element={<EstimateDashboard />} />
         <Route path="/generate-invoice/:id" element={<GenerateInvoice />} />
-<Route path="/invoices" element={<InvoiceDashboard />} />
+        <Route path="/invoices" element={<InvoiceDashboard />} />
         {/* <Route path="/chains/add" element={<ChainForm />} /> */}
         {/* <Route path="/chains/edit/:id" element={<ChainForm />} /> */}
 

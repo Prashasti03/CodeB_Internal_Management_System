@@ -79,10 +79,10 @@ public class EmailService {
 
         mailSender.send(message);
 
-        System.out.println("3. ✅ Email with attachment sent successfully!");
+        System.out.println("3. Email with attachment sent successfully!");
 
     } catch (Exception e) {
-        System.out.println("3. ❌ Email with attachment FAILED!");
+        System.out.println("3. Email with attachment FAILED!");
         e.printStackTrace(); // CHECK RENDER LOGS
     }
 }

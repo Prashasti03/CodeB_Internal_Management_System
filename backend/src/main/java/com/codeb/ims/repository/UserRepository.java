@@ -13,6 +13,4 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByVerificationToken(String token);
 
     Optional<User> findByResetToken(String resetToken);
-
-    // Optional<User> findByEmail(String email);
 }

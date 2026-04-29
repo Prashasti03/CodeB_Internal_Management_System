@@ -14,4 +14,6 @@ public interface InvoiceService {
 
     Invoice updateEmail(Long id, String email);
 
+    List<Invoice> search(String q);
+
 }

@@ -30,7 +30,13 @@ public class InvoiceServiceImpl implements InvoiceService {
         Estimate est = estimateRepository.findById(estimateId)
                 .orElseThrow(() -> new RuntimeException("Estimate not found"));
 
-        int invoiceNo = (int) (System.currentTimeMillis() % 100000);
+        // int invoiceNo = (int) (System.currentTimeMillis() % 100000);
+        Random random = new Random();
+        int invoiceNo = 1000 + random.nextInt(9000);
+
+        while (invoiceRepository.existsByInvoiceNo(invoiceNo)) {
+            invoiceNo = 1000 + random.nextInt(9000);
+        }
 
         Invoice invoice = Invoice.builder()
                 .invoiceNo(invoiceNo)
@@ -83,4 +89,9 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setEmailId(email);
         return invoiceRepository.save(invoice);
     }
+
+    @Override
+public List<Invoice> search(String q) {
+    return invoiceRepository.search(q);
+}
 }

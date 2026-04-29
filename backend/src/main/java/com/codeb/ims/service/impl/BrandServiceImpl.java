@@ -93,7 +93,7 @@ public class BrandServiceImpl implements BrandService {
         brandRepository.save(brand);
     }
 
-    // 🔁 MAPPER METHOD
+    // MAPPER METHOD
     private BrandResponse mapToResponse(Brand brand) {
         BrandResponse res = new BrandResponse();
         res.setBrandId(brand.getBrandId());

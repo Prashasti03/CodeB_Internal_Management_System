@@ -55,4 +55,9 @@ public class InvoiceController {
                 .header("Content-Disposition", "attachment; filename=invoice.pdf")
                 .body(pdf);
     }
+
+    @GetMapping("/search")
+    public List<Invoice> search(@RequestParam String q) {
+        return invoiceService.search(q);
+    }
 }

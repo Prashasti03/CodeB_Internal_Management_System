@@ -20,7 +20,6 @@ public class ChainServiceImpl implements ChainService {
 
     private final ChainRepository chainRepository;
     private final GroupRepository groupRepository;
-    // private final BrandRepository brandRepository;
 
     @Autowired
     private BrandRepository brandRepository;

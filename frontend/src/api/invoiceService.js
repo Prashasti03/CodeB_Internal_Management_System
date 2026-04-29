@@ -1,10 +1,5 @@
 import api from "./axios";
 
-// Generate invoice
-// export const generateInvoice = (estimateId, email) => {
-//   return api.post(`/invoices/generate/${estimateId}?email=${email}`);
-// };
-
 export const generateInvoice = (estimateId, email) => {
   return api.post(
     `/invoices/generate/${estimateId}`,

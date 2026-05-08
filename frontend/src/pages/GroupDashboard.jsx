@@ -5,19 +5,28 @@ import {
   updateGroup,
   deleteGroup,
 } from "../api/groupService";
+import Toast from "../components/Toast";
 
 function GroupDashboard() {
   const [groups, setGroups] = useState([]);
   const [name, setName] = useState("");
   const [editId, setEditId] = useState(null);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [tableLoading, setTableLoading] = useState(true);
 
   const fetchGroups = async () => {
     try {
+      setTableLoading(true);
+
       const res = await getGroups();
+
       setGroups(res.data);
     } catch (error) {
       setError("Failed to load groups");
+    } finally {
+      setTableLoading(false);
     }
   };
 
@@ -28,20 +37,35 @@ function GroupDashboard() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setError("");
+    setSuccess("");
+
+    if (!name.trim()) {
+      setError("Group name is required");
+      return;
+    }
+
     try {
+      setLoading(true);
+
       if (editId) {
-        await updateGroup(editId, { groupName: name });
+        await updateGroup(editId, {
+          groupName: name,
+        });
+
+        setSuccess("Group updated successfully");
       } else {
-        if (!name.trim()) {
-          setError("Group name is required");
-          return;
-        }
-        await createGroup({ groupName: name });
-        alert(editId ? "Updated successfully" : "Created successfully");
+        await createGroup({
+          groupName: name,
+        });
+
+        setSuccess("Group created successfully");
       }
 
       setName("");
+
       setEditId(null);
+
       fetchGroups();
     } catch (error) {
       if (error.response && error.response.data.message) {
@@ -49,6 +73,8 @@ function GroupDashboard() {
       } else {
         setError("Something went wrong");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,8 +84,19 @@ function GroupDashboard() {
   };
 
   const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this group?",
+    );
+
+    if (!confirmDelete) return;
+
     try {
+      setLoading(true);
+
       await deleteGroup(id);
+
+      setSuccess("Group deleted successfully");
+
       fetchGroups();
     } catch (error) {
       if (error.response && error.response.data) {
@@ -67,6 +104,8 @@ function GroupDashboard() {
       } else {
         setError("Cannot delete group");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -74,19 +113,18 @@ function GroupDashboard() {
     <div className="container mt-4">
       <h2>Group Management</h2>
 
-      {/* Error Alert */}
+      {/* Success Toast */}
+      {success && (
+        <Toast
+          message={success}
+          type="success"
+          onClose={() => setSuccess("")}
+        />
+      )}
+
+      {/* Error Toast */}
       {error && (
-        <div
-          className="alert alert-danger alert-dismissible fade show"
-          role="alert"
-        >
-          {error}
-          <button
-            type="button"
-            className="btn-close"
-            onClick={() => setError("")}
-          ></button>
-        </div>
+        <Toast message={error} type="danger" onClose={() => setError("")} />
       )}
 
       <form onSubmit={handleSubmit} className="mb-3">
@@ -96,8 +134,15 @@ function GroupDashboard() {
           onChange={(e) => setName(e.target.value)}
           placeholder="Enter group name"
         />
-        <button className="btn btn-primary">
-          {editId ? "Update" : "Add"} Group
+        <button className="btn btn-primary" disabled={loading}>
+          {loading ? (
+            <>
+              <span className="spinner-border spinner-border-sm me-2"></span>
+              Processing...
+            </>
+          ) : (
+            <>{editId ? "Update" : "Add"} Group</>
+          )}
         </button>
       </form>
 
@@ -112,7 +157,15 @@ function GroupDashboard() {
         </thead>
 
         <tbody>
-          {groups.length === 0 ? (
+          {tableLoading ? (
+            <tr>
+              <td colSpan="4" className="text-center">
+                <div className="spinner-border text-primary"></div>
+
+                <p className="mt-2">Loading groups...</p>
+              </td>
+            </tr>
+          ) : groups.length === 0 ? (
             <tr>
               <td colSpan="4" className="text-center">
                 No groups found
@@ -122,18 +175,24 @@ function GroupDashboard() {
             groups.map((g) => (
               <tr key={g.groupId}>
                 <td>{g.groupId}</td>
+
                 <td>{g.groupName}</td>
+
                 <td>{g.isActive ? "Active" : "Inactive"}</td>
+
                 <td>
                   <button
                     className="btn btn-warning me-2"
                     onClick={() => handleEdit(g)}
+                    disabled={loading}
                   >
                     Edit
                   </button>
+
                   <button
                     className="btn btn-danger"
                     onClick={() => handleDelete(g.groupId)}
+                    disabled={loading}
                   >
                     Delete
                   </button>

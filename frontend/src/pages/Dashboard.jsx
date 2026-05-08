@@ -28,7 +28,7 @@ const Dashboard = () => {
       {/* Cards Section */}
       <div className="row g-4">
         {/* Profile Card */}
-        <div className="col-md-4">
+        {/* <div className="col-md-4">
           <div className="card shadow-sm border-0 h-100">
             <div className="card-body">
               <h5 className="card-title">Profile</h5>
@@ -37,7 +37,7 @@ const Dashboard = () => {
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Groups Card (Admin Only) */}
         {user?.role === "ADMIN" && (
@@ -163,7 +163,7 @@ const Dashboard = () => {
                 </button> */}
 
         {/* General Access */}
-        <div className="col-md-4">
+        {/* <div className="col-md-4">
           <div className="card shadow-sm border-0 h-100">
             <div className="card-body">
               <h5 className="card-title">Activities</h5>
@@ -172,7 +172,7 @@ const Dashboard = () => {
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

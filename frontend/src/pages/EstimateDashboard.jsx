@@ -81,9 +81,7 @@ const EstimateDashboard = () => {
   };
 
   // TOTAL COST
-  const total = form.qty && form.costPerUnit
-    ? form.qty * form.costPerUnit
-    : 0;
+  const total = form.qty && form.costPerUnit ? form.qty * form.costPerUnit : 0;
 
   // SUBMIT
   const handleSubmit = async (e) => {
@@ -126,7 +124,6 @@ const EstimateDashboard = () => {
       });
 
       fetchData();
-
     } catch (err) {
       toast.error("Operation failed");
     } finally {
@@ -157,9 +154,10 @@ const EstimateDashboard = () => {
   };
 
   // FILTER
-  const filtered = estimates.filter((e) =>
-    e.chainName?.toLowerCase().includes(search.toLowerCase()) ||
-    e.service?.toLowerCase().includes(search.toLowerCase())
+  const filtered = estimates.filter(
+    (e) =>
+      e.chainName?.toLowerCase().includes(search.toLowerCase()) ||
+      e.service?.toLowerCase().includes(search.toLowerCase()),
   );
 
   return (
@@ -176,7 +174,6 @@ const EstimateDashboard = () => {
       {/* FORM */}
       <form onSubmit={handleSubmit} className="card p-3 mb-4">
         <div className="row g-2">
-
           {/* CHAIN */}
           <div className="col-12 col-md-3">
             <select
@@ -184,7 +181,7 @@ const EstimateDashboard = () => {
               value={form.chainId}
               onChange={(e) => {
                 const selected = chains.find(
-                  (c) => c.chainId == e.target.value
+                  (c) => c.chainId == e.target.value,
                 );
                 setForm({
                   ...form,
@@ -253,7 +250,6 @@ const EstimateDashboard = () => {
         </div>
 
         <div className="row g-2 mt-2">
-
           <div className="col-12 col-md-3">
             <input
               className={`form-control ${!form.service && "is-invalid"}`}
@@ -334,12 +330,15 @@ const EstimateDashboard = () => {
 
       {/* TABLE */}
       <div className="table-responsive">
-        <table className="table table-bordered">
+        <table className="table table-bordered table-hover">
           <thead>
             <tr>
               <th>ID</th>
               <th>Chain ID</th>
               <th>Chain Name</th>
+              <th>Group</th>
+              <th>Brand</th>
+              <th>Zone</th>
               <th>Service</th>
               <th>Qty</th>
               <th>Cost</th>
@@ -355,6 +354,9 @@ const EstimateDashboard = () => {
                 <td>{est.estimatedId}</td>
                 <td>{est.chainId}</td>
                 <td>{est.chainName}</td>
+                <td>{est.groupName}</td>
+                <td>{est.brandName}</td>
+                <td>{est.zoneName}</td>
                 <td>{est.service}</td>
                 <td>{est.qty}</td>
                 <td>{est.costPerUnit}</td>

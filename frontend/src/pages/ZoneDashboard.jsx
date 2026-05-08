@@ -190,6 +190,7 @@ function ZoneDashboard() {
       <table className="table table-bordered">
         <thead>
           <tr>
+            <th>ID</th>
             <th>Zone</th>
             <th>Brand</th>
             <th>Company</th>
@@ -200,6 +201,7 @@ function ZoneDashboard() {
         <tbody>
           {zones.map((z) => (
             <tr key={z.zoneId}>
+              <td>{z.zoneId}</td>
               <td>{z.zoneName}</td>
               <td>{z.brandName}</td>
               <td>{z.companyName}</td>

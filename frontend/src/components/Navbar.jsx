@@ -8,7 +8,6 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
       <div className="container">
-
         {/* Logo */}
         <span
           className="navbar-brand fw-bold"
@@ -31,7 +30,6 @@ const Navbar = () => {
         {/* Menu */}
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto align-items-center">
-
             {!user ? (
               <>
                 <li className="nav-item">
@@ -138,40 +136,40 @@ const Navbar = () => {
                   </li>
                 )} */}
 
-                
-                  <li className="nav-item">
-                    <span
-                      className="nav-link"
-                      onClick={() => navigate("/estimates")}
-                      style={{ cursor: "pointer" }}
-                    >
-                      Estimates
-                    </span>
-                  </li>
+                <li className="nav-item">
+                  <span
+                    className="nav-link"
+                    onClick={() => navigate("/estimates")}
+                    style={{ cursor: "pointer" }}
+                  >
+                    Estimates
+                  </span>
+                </li>
 
-                  <li className="nav-item">
-                    <span
-                      className="nav-link"
-                      onClick={() => navigate("/invoices")}
-                      style={{ cursor: "pointer" }}
-                    >
-                      Invoices
-                    </span>
-                  </li>
-                
+                <li className="nav-item">
+                  <span
+                    className="nav-link"
+                    onClick={() => navigate("/invoices")}
+                    style={{ cursor: "pointer" }}
+                  >
+                    Invoices
+                  </span>
+                </li>
 
                 {/* Logout */}
                 <li className="nav-item">
                   <button
                     className="btn btn-sm btn-outline-danger ms-3"
-                    onClick={logout}
+                    onClick={() => {
+                      logout();
+                      navigate("/login");
+                    }}
                   >
                     Logout
                   </button>
                 </li>
               </>
             )}
-
           </ul>
         </div>
       </div>

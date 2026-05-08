@@ -1,6 +1,7 @@
 import { useState } from "react";
 import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
+import Toast from "../components/Toast";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ const Register = () => {
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -20,8 +22,11 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setError("");
     setSuccess("");
+
+    setLoading(true);
 
     try {
       await api.post("/auth/register", form);
@@ -35,6 +40,8 @@ const Register = () => {
       setError(
         err.response?.data?.message || "Registration failed. Try again.",
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -44,10 +51,16 @@ const Register = () => {
         <h3 className="text-center mb-3">Register</h3>
 
         {success && (
-          <div className="alert alert-success text-center">{success}</div>
+          <Toast
+            message={success}
+            type="success"
+            onClose={() => setSuccess("")}
+          />
         )}
 
-        {error && <div className="alert alert-danger text-center">{error}</div>}
+        {error && (
+          <Toast message={error} type="danger" onClose={() => setError("")} />
+        )}
 
         <form onSubmit={handleSubmit}>
           <input
@@ -86,7 +99,16 @@ const Register = () => {
             <option value="ADMIN">Admin</option>
           </select>
 
-          <button className="btn btn-success w-100">Register</button>
+          <button className="btn btn-success w-100" disabled={loading}>
+            {loading ? (
+              <>
+                <span className="spinner-border spinner-border-sm me-2"></span>
+                Registering...
+              </>
+            ) : (
+              "Register"
+            )}
+          </button>
         </form>
       </div>
     </div>

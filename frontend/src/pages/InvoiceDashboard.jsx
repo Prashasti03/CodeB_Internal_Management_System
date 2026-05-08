@@ -82,7 +82,7 @@ export default function InvoiceDashboard() {
 
       <input
         className="form-control mb-3"
-        placeholder="Search..."
+        placeholder="Search on the basis of Invoice No., Estimate ID, Chain ID or Email ID..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />

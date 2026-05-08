@@ -2,34 +2,48 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
+import Toast from "../components/Toast";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setError("");
     setSuccess("");
 
+    setLoading(true);
+
     try {
-      const res = await api.post("/auth/login", { email, password });
+      const res = await api.post("/auth/login", {
+        email,
+        password,
+      });
+
       const token = res.data;
 
       login(token);
+
       setSuccess("Login successful!");
 
-      setTimeout(() => navigate("/dashboard"), 1000);
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1000);
     } catch (err) {
       const message =
         err.response?.data?.message || err.response?.data || "Login failed";
 
       setError(message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -39,12 +53,18 @@ const Login = () => {
       <div className="card p-4 shadow col-12 col-sm-10 col-md-6 col-lg-4">
         <h3 className="text-center mb-3">Login</h3>
 
-        {/* Alerts */}
+        {/* Toasts */}
         {success && (
-          <div className="alert alert-success text-center">{success}</div>
+          <Toast
+            message={success}
+            type="success"
+            onClose={() => setSuccess("")}
+          />
         )}
 
-        {error && <div className="alert alert-danger text-center">{error}</div>}
+        {error && (
+          <Toast message={error} type="danger" onClose={() => setError("")} />
+        )}
 
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
@@ -69,7 +89,16 @@ const Login = () => {
             />
           </div>
 
-          <button className="btn btn-primary w-100">Login</button>
+          <button className="btn btn-primary w-100" disabled={loading}>
+            {loading ? (
+              <>
+                <span className="spinner-border spinner-border-sm me-2"></span>
+                Logging in...
+              </>
+            ) : (
+              "Login"
+            )}
+          </button>
         </form>
 
         <p className="text-center mt-3">

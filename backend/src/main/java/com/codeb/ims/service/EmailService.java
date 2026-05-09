@@ -61,29 +61,32 @@ public class EmailService {
 
     public void sendEmailWithAttachment(String to, String subject, String text, byte[] pdf) {
 
-    try {
-        System.out.println("2. Sending email with attachment to: " + to);
+        try {
+            System.out.println("2. Sending email with attachment to: " + to);
 
-        MimeMessage message = mailSender.createMimeMessage();
+            MimeMessage message = mailSender.createMimeMessage();
 
-        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-        helper.setTo(to);
-        helper.setSubject(subject);
-        helper.setText(text);
+            helper.setTo(to);
+            helper.setSubject(subject);
 
-        // VERY IMPORTANT
-        helper.setFrom("dhanorkarprashasti@gmail.com");
+            helper.setText(text, false);
 
-        helper.addAttachment("invoice.pdf", new ByteArrayResource(pdf));
+            System.out.println("PDF SIZE: " + pdf.length);
 
-        mailSender.send(message);
+            // VERY IMPORTANT
+            helper.setFrom("dhanorkarprashasti@gmail.com");
 
-        System.out.println("3. Email with attachment sent successfully!");
+            helper.addAttachment("invoice.pdf", new ByteArrayResource(pdf));
 
-    } catch (Exception e) {
-        System.out.println("3. Email with attachment FAILED!");
-        e.printStackTrace(); // CHECK RENDER LOGS
+            mailSender.send(message);
+
+            System.out.println("3. Email with attachment sent successfully!");
+
+        } catch (Exception e) {
+            System.out.println("3. Email with attachment FAILED!");
+            e.printStackTrace(); // CHECK RENDER LOGS
+        }
     }
-}
 }

@@ -3,7 +3,7 @@ package com.codeb.ims.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import com.codeb.ims.security.JwtAuthFilter;
@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+// import org.springframework.http.HttpMethod;
 
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -39,17 +40,61 @@ public class SecurityConfig {
                 http
                         .csrf(csrf -> csrf.disable())
                         .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                        // .authorizeHttpRequests(auth -> auth
+                        // .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**")
+                        // .permitAll()
+                        // .requestMatchers("/").permitAll()
+                        // .requestMatchers("/api/auth/**").permitAll()
+                        // .requestMatchers("/api/groups/**").hasRole("ADMIN")
+                        // .requestMatchers("/api/chains/**").hasRole("ADMIN")
+                        // .requestMatchers("/api/zones/**").hasRole("ADMIN")
+                        // .requestMatchers("/api/estimates/**").hasAnyRole("ADMIN", "SALES")
+                        // .requestMatchers("/api/invoices/**").hasAnyRole("ADMIN","SALES")
+                        // .anyRequest().authenticated())
                         .authorizeHttpRequests(auth -> auth
-                                .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**")
-                                .permitAll()
-                                .requestMatchers("/").permitAll()
-                                .requestMatchers("/api/auth/**").permitAll()
-                                .requestMatchers("/api/groups/**").hasRole("ADMIN")
-                                .requestMatchers("/api/chains/**").hasRole("ADMIN")
-                                .requestMatchers("/api/zones/**").hasRole("ADMIN")
-                                .requestMatchers("/api/estimates/**").hasAnyRole("ADMIN", "SALES")
-                                .requestMatchers("/api/invoices/**").hasAnyRole("ADMIN","SALES")
-                                .anyRequest().authenticated())
+
+                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                                        .requestMatchers("/").permitAll()
+                                        .requestMatchers("/api/auth/**").permitAll()
+
+                                        // GROUPS
+                                        .requestMatchers(HttpMethod.GET, "/api/groups/**")
+                                        .hasAnyRole("ADMIN", "SALES")
+
+                                        .requestMatchers("/api/groups/**")
+                                        .hasRole("ADMIN")
+
+                                        // CHAINS
+                                        .requestMatchers(HttpMethod.GET, "/api/chains/**")
+                                        .hasAnyRole("ADMIN", "SALES")
+
+                                        .requestMatchers("/api/chains/**")
+                                        .hasRole("ADMIN")
+
+                                        // BRANDS
+                                        .requestMatchers(HttpMethod.GET, "/api/brands/**")
+                                        .hasAnyRole("ADMIN", "SALES")
+
+                                        .requestMatchers("/api/brands/**")
+                                        .hasRole("ADMIN")
+
+                                        // ZONES
+                                        .requestMatchers(HttpMethod.GET, "/api/zones/**")
+                                        .hasAnyRole("ADMIN", "SALES")
+
+                                        .requestMatchers("/api/zones/**")
+                                        .hasRole("ADMIN")
+
+                                        // ESTIMATES
+                                        .requestMatchers("/api/estimates/**")
+                                        .hasAnyRole("ADMIN", "SALES")
+
+                                        // INVOICES
+                                        .requestMatchers("/api/invoices/**")
+                                        .hasAnyRole("ADMIN", "SALES")
+
+                                        .anyRequest().authenticated())
                         .exceptionHandling(ex -> ex
                                 .authenticationEntryPoint((request, response, authException) -> {
                                         response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
@@ -87,9 +132,9 @@ public class SecurityConfig {
                 CorsConfiguration config = new CorsConfiguration();
 
                 config.setAllowedOrigins(List.of(
-                        // "http://localhost:5173",
-                        // "https://idyllic-pastelito-b100f6.netlify.app",
-                        "https://code-b-internal-management-system.vercel.app"));
+                                // "http://localhost:5173",
+                                // "https://idyllic-pastelito-b100f6.netlify.app",
+                                "https://code-b-internal-management-system.vercel.app"));
                 config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                 config.setAllowedHeaders(List.of("*"));
                 config.setAllowCredentials(true);
